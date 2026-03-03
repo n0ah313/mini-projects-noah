@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polynomial Root Finder</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root {
+  --bg:#0a0e1a;--bg2:#111827;--bg3:#1a2236;--bg4:#1e2a40;
+  --blue:#4f8ef7;--blue2:#3b7de8;--purple:#a78bfa;--cyan:#22d3ee;
+  --green:#34d399;--red:#f87171;--orange:#fb923c;--yellow:#fbbf24;
+  --text:#f1f5f9;--text2:#94a3b8;--text3:#64748b;
+  --border:rgba(79,142,247,0.15);--glow:rgba(79,142,247,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem 4rem;}
+
+/* HEADER */
+.header{text-align:center;margin-bottom:2.5rem;}
+.header-badge{display:inline-block;background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.3);color:var(--blue);font-size:0.72rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:0.35rem 1rem;border-radius:20px;margin-bottom:1rem;}
+.header h1{font-family:'Space Grotesk',sans-serif;font-size:2.6rem;font-weight:700;background:linear-gradient(135deg,var(--text) 0%,var(--blue) 50%,var(--purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:0.6rem;}
+.header p{color:var(--text2);font-size:0.95rem;max-width:500px;line-height:1.6;}
+
+/* MAIN CARD */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:2rem;width:100%;max-width:680px;box-shadow:0 20px 60px rgba(0,0,0,0.4);}
+
+/* DEGREE SELECTOR */
+.degree-label{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:0.75rem;}
+.degree-row{display:flex;gap:0.5rem;margin-bottom:1.75rem;flex-wrap:wrap;}
+.deg-btn{flex:1;min-width:50px;background:var(--bg3);border:1px solid rgba(255,255,255,0.07);color:var(--text2);font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;padding:0.6rem 0.5rem;border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:center;}
+.deg-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--glow);}
+.deg-btn.active{background:rgba(79,142,247,0.15);border-color:var(--blue);color:var(--blue);}
+.deg-btn .deg-name{font-size:0.7rem;font-weight:400;color:var(--text3);display:block;margin-top:0.1rem;}
+.deg-btn.active .deg-name{color:rgba(79,142,247,0.7);}
+
+/* EQUATION DISPLAY */
+.eq-display{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.4rem;margin-bottom:1.5rem;font-family:'JetBrains Mono',monospace;font-size:1.1rem;color:var(--text);text-align:center;letter-spacing:0.5px;min-height:52px;display:flex;align-items:center;justify-content:center;}
+.eq-part{color:var(--text2);}
+.eq-coeff{color:var(--cyan);font-weight:500;}
+.eq-zero{color:var(--text3);}
+.eq-var{color:var(--purple);}
+
+/* COEFFICIENT INPUTS */
+.coeffs-grid{display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem;justify-content:center;}
+.coeff-wrap{display:flex;flex-direction:column;align-items:center;gap:0.35rem;}
+.coeff-label{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text2);text-align:center;}
+.coeff-label span{color:var(--purple);}
+.coeff-input{width:76px;background:var(--bg4);border:1.5px solid rgba(255,255,255,0.08);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:500;padding:0.6rem 0.5rem;border-radius:9px;text-align:center;outline:none;transition:all 0.18s;}
+.coeff-input:focus{border-color:var(--blue);background:rgba(79,142,247,0.06);box-shadow:0 0 0 3px rgba(79,142,247,0.1);}
+.coeff-input::placeholder{color:var(--text3);}
+
+/* SOLVE BUTTON */
+.solve-btn{width:100%;background:linear-gradient(135deg,var(--blue2),#6366f1);color:#fff;border:none;padding:0.9rem;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.22s;letter-spacing:0.3px;margin-bottom:1.5rem;}
+.solve-btn:hover{opacity:0.92;transform:translateY(-1px);box-shadow:0 8px 24px rgba(79,142,247,0.3);}
+.solve-btn:active{transform:translateY(0);}
+
+/* RESULTS */
+.results{display:none;}
+.results.show{display:block;}
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.results-title{font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:1px;}
+.root-count{background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.25);color:var(--green);font-size:0.78rem;font-weight:600;padding:0.25rem 0.75rem;border-radius:20px;}
+.root-count.complex{background:rgba(167,139,250,0.12);border-color:rgba(167,139,250,0.25);color:var(--purple);}
+
+.roots-list{display:flex;flex-direction:column;gap:0.6rem;}
+.root-item{background:var(--bg3);border:1px solid rgba(255,255,255,0.06);border-radius:11px;padding:0.9rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.root-item.real{border-left:3px solid var(--green);}
+.root-item.complex-root{border-left:3px solid var(--purple);}
+.root-item.repeated{border-left:3px solid var(--orange);}
+.root-label{font-size:0.75rem;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:1px;min-width:40px;}
+.root-value{font-family:'JetBrains Mono',monospace;font-size:1.05rem;color:var(--text);font-weight:500;}
+.root-value .real-part{color:var(--cyan);}
+.root-value .imag-part{color:var(--purple);}
+.root-badge{font-size:0.7rem;font-weight:600;padding:0.2rem 0.6rem;border-radius:6px;white-space:nowrap;}
+.badge-real{background:rgba(52,211,153,0.12);color:var(--green);}
+.badge-complex{background:rgba(167,139,250,0.12);color:var(--purple);}
+.badge-repeated{background:rgba(251,146,60,0.12);color:var(--orange);}
+.badge-integer{background:rgba(34,211,238,0.12);color:var(--cyan);}
+
+/* FACTORED FORM */
+.factored{background:var(--bg3);border:1px solid rgba(79,142,247,0.2);border-radius:11px;padding:1rem 1.25rem;margin-top:1rem;}
+.factored-label{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:0.5rem;}
+.factored-eq{font-family:'JetBrains Mono',monospace;font-size:0.95rem;color:var(--blue);line-height:1.8;word-break:break-all;}
+
+/* GRAPH */
+.graph-wrap{margin-top:1.25rem;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem;overflow:hidden;}
+.graph-label{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:0.75rem;}
+canvas{display:block;width:100%;border-radius:8px;}
+
+/* ERROR */
+.error-box{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:10px;padding:0.9rem 1.1rem;color:var(--red);font-size:0.88rem;display:none;}
+.error-box.show{display:block;}
+
+/* EXAMPLES */
+.examples{margin-top:1.25rem;border-top:1px solid rgba(255,255,255,0.05);padding-top:1.25rem;}
+.examples-label{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:0.75rem;}
+.example-btns{display:flex;flex-wrap:wrap;gap:0.5rem;}
+.ex-btn{background:var(--bg3);border:1px solid rgba(255,255,255,0.07);color:var(--text2);font-size:0.78rem;font-family:'JetBrains Mono',monospace;padding:0.35rem 0.75rem;border-radius:7px;cursor:pointer;transition:all 0.18s;}
+.ex-btn:hover{border-color:var(--blue);color:var(--blue);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">Mathematics Tool</div>
+  <h1>Polynomial Root Finder</h1>
+  <p>Find all roots of polynomials from linear to degree 5 — including complex roots and repeated roots.</p>
+</div>
+
+<div class="card">
+  <!-- DEGREE -->
+  <div class="degree-label">Select Degree</div>
+  <div class="degree-row">
+    <button class="deg-btn" onclick="setDegree(1,this)">x¹<span class="deg-name">Linear</span></button>
+    <button class="deg-btn active" onclick="setDegree(2,this)">x²<span class="deg-name">Quadratic</span></button>
+    <button class="deg-btn" onclick="setDegree(3,this)">x³<span class="deg-name">Cubic</span></button>
+    <button class="deg-btn" onclick="setDegree(4,this)">x⁴<span class="deg-name">Quartic</span></button>
+    <button class="deg-btn" onclick="setDegree(5,this)">x⁵<span class="deg-name">Quintic</span></button>
+  </div>
+
+  <!-- EQUATION DISPLAY -->
+  <div class="eq-display" id="eq-display">—</div>
+
+  <!-- INPUTS -->
+  <div class="coeffs-grid" id="coeffs-grid"></div>
+
+  <!-- ERROR -->
+  <div class="error-box" id="error-box"></div>
+
+  <!-- SOLVE -->
+  <button class="solve-btn" onclick="solve()">Find Roots</button>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+    <div class="results-header">
+      <div class="results-title">Roots</div>
+      <div class="root-count" id="root-count"></div>
+    </div>
+    <div class="roots-list" id="roots-list"></div>
+    <div class="factored" id="factored-wrap">
+      <div class="factored-label">Factored Form</div>
+      <div class="factored-eq" id="factored-eq"></div>
+    </div>
+    <div class="graph-wrap">
+      <div class="graph-label">Graph y = f(x)</div>
+      <canvas id="graph" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div class="examples">
+    <div class="examples-label">Quick Examples</div>
+    <div class="example-btns" id="example-btns"></div>
+  </div>
+</div>
+
+<script>
+let degree = 2;
+
+const examples = [
+  {label:'x²-5x+6',deg:2,coeffs:[1,-5,6]},
+  {label:'x²+1',deg:2,coeffs:[1,0,1]},
+  {label:'x²-4',deg:2,coeffs:[1,0,-4]},
+  {label:'x²+2x+1',deg:2,coeffs:[1,2,1]},
+  {label:'x³-6x²+11x-6',deg:3,coeffs:[1,-6,11,-6]},
+  {label:'x³-3x+2',deg:3,coeffs:[1,0,-3,2]},
+  {label:'x³+x',deg:3,coeffs:[1,0,1,0]},
+  {label:'x⁴-5x²+4',deg:4,coeffs:[1,0,-5,0,4]},
+  {label:'x⁴-1',deg:4,coeffs:[1,0,0,0,-1]},
+  {label:'x⁵-x',deg:5,coeffs:[1,0,0,0,-1,0]},
+];
+
+const superscripts = ['','','²','³','⁴','⁵'];
+const termLabels = n => {
+  if(n===0) return 'constant';
+  if(n===1) return 'x';
+  return `x${superscripts[n]}`;
+};
+
+function setDegree(d, el){
+  degree = d;
+  document.querySelectorAll('.deg-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  buildInputs();
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('error-box').classList.remove('show');
+}
+
+function buildInputs(){
+  const grid = document.getElementById('coeffs-grid');
+  grid.innerHTML='';
+  for(let i=degree;i>=0;i--){
+    const wrap=document.createElement('div');wrap.className='coeff-wrap';
+    const lbl=document.createElement('div');lbl.className='coeff-label';
+    if(i===0) lbl.textContent='constant';
+    else if(i===1) lbl.innerHTML='<span>x</span> coeff';
+    else lbl.innerHTML=`<span>x${superscripts[i]}</span> coeff`;
+    const inp=document.createElement('input');
+    inp.type='text';inp.inputMode='numeric';
+    inp.className='coeff-input';inp.id=`c${i}`;
+    inp.placeholder='0';
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter') solve(); });
+    inp.addEventListener('input',updateEqDisplay);
+    wrap.appendChild(lbl);wrap.appendChild(inp);
+    grid.appendChild(wrap);
+  }
+  updateEqDisplay();
+  buildExamples();
+}
+
+function getCoeffs(){
+  const c=[];
+  for(let i=degree;i>=0;i--){
+    const v=document.getElementById(`c${i}`).value.trim();
+    c.push(v===''?0:parseFloat(v));
+  }
+  return c; // c[0]=leading coeff, c[degree]=constant
+}
+
+function updateEqDisplay(){
+  const c=getCoeffs();
+  let terms=[];
+  for(let i=0;i<c.length;i++){
+    const pow=degree-i;
+    const val=c[i];
+    if(val===0&&pow>0) continue;
+    let s='';
+    const absVal=Math.abs(val);
+    const sign=val<0?'-':'+';
+    if(terms.length===0){
+      if(val<0) s+='<span class="eq-part">-</span>';
+    } else {
+      s+=`<span class="eq-part"> ${sign} </span>`;
+    }
+    if(pow===0){
+      s+=`<span class="eq-coeff">${absVal}</span>`;
+    } else if(absVal===1){
+      s+=`<span class="eq-var">${pow===1?'x':'x'+superscripts[pow]}</span>`;
+    } else {
+      s+=`<span class="eq-coeff">${absVal}</span><span class="eq-var">${pow===1?'x':'x'+superscripts[pow]}</span>`;
+    }
+    terms.push(s);
+  }
+  const disp=document.getElementById('eq-display');
+  if(terms.length===0) disp.innerHTML='<span class="eq-zero">0</span>';
+  else disp.innerHTML=terms.join('')+' <span class="eq-part">= 0</span>';
+}
+
+// ── MATH ──────────────────────────────────────────────────────────────
+
+// Complex number helpers
+function cadd(a,b){return{r:a.r+b.r,i:a.i+b.i};}
+function csub(a,b){return{r:a.r-b.r,i:a.i-b.i};}
+function cmul(a,b){return{r:a.r*b.r-a.i*b.i,i:a.r*b.i+a.i*b.r};}
+function cdiv(a,b){const d=b.r*b.r+b.i*b.i;return{r:(a.r*b.r+a.i*b.i)/d,i:(a.i*b.r-a.r*b.i)/d};}
+function cabs(a){return Math.sqrt(a.r*a.r+a.i*a.i);}
+function csqrt(a){const m=Math.sqrt(cabs(a)),ang=Math.atan2(a.i,a.r)/2;return{r:m*Math.cos(ang),i:m*Math.sin(ang)};}
+function c(re,im=0){return{r:re,i:im||0};}
+
+// Evaluate polynomial at complex x
+function polyEval(coeffs,x){
+  // coeffs[0]=leading, coeffs[n]=constant
+  let res=c(0);
+  for(let i=0;i<coeffs.length;i++){
+    res=cadd(cmul(res,x),c(coeffs[i]));
+  }
+  return res;
+}
+
+// Derivative polynomial coeffs
+function polyDeriv(coeffs){
+  const n=coeffs.length-1;
+  const d=[];
+  for(let i=0;i<n;i++) d.push(coeffs[i]*(n-i));
+  return d;
+}
+
+// Aberth–Ehrlich method for all roots
+function aberthRoots(coeffs){
+  const n=coeffs.length-1;
+  if(n===0) return [];
+  // Initial estimates on circle
+  let roots=[];
+  const R=Math.pow(Math.abs(coeffs[n]/coeffs[0]),1/n)*1.1+0.5;
+  for(let k=0;k<n;k++){
+    const ang=2*Math.PI*k/n+0.1;
+    roots.push({r:R*Math.cos(ang),i:R*Math.sin(ang)});
+  }
+  const dCoeffs=polyDeriv(coeffs);
+  for(let iter=0;iter<120;iter++){
+    let maxDelta=0;
+    const newRoots=[...roots];
+    for(let i=0;i<n;i++){
+      const fz=polyEval(coeffs,roots[i]);
+      const dfz=polyEval(dCoeffs,roots[i]);
+      if(cabs(dfz)<1e-20) continue;
+      let sum=c(0);
+      for(let j=0;j<n;j++){
+        if(j===i) continue;
+        const diff=csub(roots[i],roots[j]);
+        if(cabs(diff)<1e-14) continue;
+        sum=cadd(sum,cdiv(c(1),diff));
+      }
+      const w=cdiv(fz,csub(dfz,cmul(fz,sum)));
+      newRoots[i]=csub(roots[i],w);
+      maxDelta=Math.max(maxDelta,cabs(w));
+    }
+    roots=newRoots;
+    if(maxDelta<1e-12) break;
+  }
+  // Polish roots
+  for(let i=0;i<n;i++){
+    for(let iter=0;iter<30;iter++){
+      const fz=polyEval(coeffs,roots[i]);
+      if(cabs(fz)<1e-14) break;
+      const dfz=polyEval(dCoeffs,roots[i]);
+      if(cabs(dfz)<1e-20) break;
+      roots[i]=csub(roots[i],cdiv(fz,dfz));
+    }
+  }
+  return roots;
+}
+
+// Snap near-integer / near-rational values
+function snapReal(x){
+  // Try fractions with small denominators
+  for(let d=1;d<=24;d++){
+    const n=Math.round(x*d);
+    if(Math.abs(x-n/d)<1e-7) return n/d;
+  }
+  return x;
+}
+
+function formatNum(x,decimals=6){
+  const snapped=snapReal(x);
+  if(Number.isInteger(snapped)) return snapped.toString();
+  // Check if it's a "nice" fraction
+  for(let d=2;d<=24;d++){
+    const n=Math.round(snapped*d);
+    if(Math.abs(snapped-n/d)<1e-9 && Math.abs(Math.gcd?Math.gcd(Math.abs(n),d):1)>=0){
+      const g=gcd(Math.abs(n),d);
+      if(d/g<=24) return `${n/g}/${d/g}`;
+    }
+  }
+  const r=parseFloat(snapped.toFixed(decimals));
+  return r.toString();
+}
+function gcd(a,b){while(b){[a,b]=[b,a%b];}return a;}
+
+function formatRoot(root){
+  const re=snapReal(root.r);
+  const im=snapReal(root.i);
+  const reZero=Math.abs(re)<1e-8;
+  const imZero=Math.abs(im)<1e-8;
+  if(imZero) return {type:'real',str:fmtN(re),re,im:0};
+  if(reZero) return {type:'complex',str:`${fmtN(im)}i`,re:0,im};
+  const imSign=im>0?'+':'-';
+  return {type:'complex',str:`${fmtN(re)} ${imSign} ${fmtN(Math.abs(im))}i`,re,im};
+}
+
+function fmtN(x){
+  // snap to nice number
+  const snapped=snapReal(x);
+  if(Number.isInteger(snapped)&&Math.abs(snapped)<1e9) return snapped.toString();
+  // fraction?
+  for(let d=2;d<=20;d++){
+    const n=Math.round(snapped*d);
+    if(Math.abs(snapped-n/d)<1e-7){
+      const g=gcd(Math.abs(n),d);
+      const nn=n/g,dd=d/g;
+      if(dd<=20 && dd>1) return `${nn}/${dd}`;
+    }
+  }
+  // sqrt?
+  for(let k=2;k<=50;k++){
+    const sq=Math.sqrt(k);
+    if(Math.abs(Math.abs(snapped)-sq)<1e-6){
+      const s=snapped<0?'-':'';
+      return `${s}√${k}`;
+    }
+    if(Math.abs(Math.abs(snapped)-sq/2)<1e-6){
+      const s=snapped<0?'-':'';
+      return `${s}√${k}/2`;
+    }
+    if(Math.abs(Math.abs(snapped)-sq/3)<1e-6){
+      const s=snapped<0?'-':'';
+      return `${s}√${k}/3`;
+    }
+  }
+  return parseFloat(snapped.toFixed(5)).toString();
+}
+
+function solve(){
+  const errBox=document.getElementById('error-box');
+  errBox.classList.remove('show');
+  const rawCoeffs=getCoeffs();
+
+  // Check leading coeff
+  if(rawCoeffs[0]===0||isNaN(rawCoeffs[0])){
+    errBox.textContent='The leading coefficient cannot be zero.';
+    errBox.classList.add('show');
+    return;
+  }
+  for(const v of rawCoeffs){
+    if(isNaN(v)){errBox.textContent='Please enter valid numbers for all coefficients.';errBox.classList.add('show');return;}
+  }
+
+  // Compute roots
+  const roots=aberthRoots(rawCoeffs);
+
+  // Format and deduplicate
+  const formatted=roots.map(formatRoot);
+
+  // Mark repeated (within tolerance)
+  const repeats={};
+  for(let i=0;i<formatted.length;i++){
+    for(let j=i+1;j<formatted.length;j++){
+      const dr=Math.abs(formatted[i].re-formatted[j].re);
+      const di=Math.abs(formatted[i].im-formatted[j].im);
+      if(dr<1e-5&&di<1e-5) repeats[j]=true;
+    }
+  }
+
+  // Sort: real first, then complex
+  const withIndex=formatted.map((f,i)=>({...f,idx:i}));
+  withIndex.sort((a,b)=>{
+    if(a.type==='real'&&b.type!=='real') return -1;
+    if(a.type!=='real'&&b.type==='real') return 1;
+    return a.re-b.re;
+  });
+
+  // Build root list HTML
+  const list=document.getElementById('roots-list');
+  list.innerHTML='';
+  let realCount=0,complexCount=0,repeatCount=0;
+  withIndex.forEach((root,rank)=>{
+    const isRepeat=repeats[root.idx];
+    if(isRepeat) repeatCount++;
+    if(root.type==='real') realCount++;
+    else complexCount++;
+
+    const item=document.createElement('div');
+    item.className=`root-item ${root.type==='real'?(isRepeat?'repeated':'real'):'complex-root'}`;
+
+    const lbl=document.createElement('div');lbl.className='root-label';
+    lbl.textContent=`x${subscriptNum(rank+1)}`;
+
+    const val=document.createElement('div');val.className='root-value';
+    if(root.type==='real'){
+      val.innerHTML=`<span class="real-part">${root.str}</span>`;
+    } else {
+      val.innerHTML=`<span class="real-part">${fmtN(root.re)}</span><span class="imag-part"> ${root.im>=0?'+ ':'- '}${fmtN(Math.abs(root.im))}i</span>`;
+    }
+
+    const badge=document.createElement('div');badge.className='root-badge';
+    if(isRepeat){badge.className+=' badge-repeated';badge.textContent='Repeated';}
+    else if(root.type==='real'){
+      // check if integer
+      if(Number.isInteger(snapReal(root.re))){badge.className+=' badge-integer';badge.textContent='Integer';}
+      else{badge.className+=' badge-real';badge.textContent='Real';}
+    } else {badge.className+=' badge-complex';badge.textContent='Complex';}
+
+    item.appendChild(lbl);item.appendChild(val);item.appendChild(badge);
+    list.appendChild(item);
+  });
+
+  // Root count badge
+  const countBadge=document.getElementById('root-count');
+  if(complexCount>0){
+    countBadge.className='root-count complex';
+    countBadge.textContent=`${realCount} real · ${complexCount} complex`;
+  } else {
+    countBadge.className='root-count';
+    countBadge.textContent=`${realCount} real root${realCount!==1?'s':''}`;
+  }
+
+  // Factored form
+  buildFactored(rawCoeffs,withIndex,repeats);
+
+  // Show results
+  document.getElementById('results').classList.add('show');
+
+  // Draw graph
+  drawGraph(rawCoeffs);
+}
+
+function subscriptNum(n){
+  const subs=['₀','₁','₂','₃','₄','₅','₆'];
+  return subs[n]||n;
+}
+
+function buildFactored(coeffs,roots,repeats){
+  const a=coeffs[0];
+  const lead=a===1?'':(a===-1?'-':`${fmtN(a)}`);
+  let factors=[];
+  const used=new Set();
+  roots.forEach((root,i)=>{
+    if(used.has(root.idx)) return;
+    // Check if it's part of a repeated pair
+    const isRepeat=repeats[root.idx];
+    if(isRepeat){
+      // find its pair
+      let pairIdx=-1;
+      roots.forEach((r2,j)=>{if(j!==i&&!used.has(r2.idx)&&Math.abs(r2.re-root.re)<1e-5&&Math.abs(r2.im-root.im)<1e-5) pairIdx=j;});
+      if(pairIdx>=0){
+        used.add(roots[pairIdx].idx);
+        const r=snapReal(root.re);
+        const rStr=r===0?'x':(r>0?`(x - ${fmtN(r)})`:`(x + ${fmtN(Math.abs(r))})`);
+        factors.push(`${rStr}²`);
+      } else {
+        pushFactor(factors,root);
+      }
+    } else if(root.type==='complex'&&root.im!==0){
+      // Complex conjugate pair → quadratic factor
+      const conjIdx=roots.findIndex((r,j)=>!used.has(r.idx)&&j!==i&&Math.abs(r.re-root.re)<1e-5&&Math.abs(r.im+root.im)<1e-5);
+      if(conjIdx>=0){
+        used.add(roots[conjIdx].idx);
+        const re=snapReal(root.re);
+        const im=snapReal(Math.abs(root.im));
+        // (x - re)^2 + im^2
+        const re2=snapReal(re*re);
+        const im2=snapReal(im*im);
+        const sumSq=snapReal(re2+im2);
+        const re2x=snapReal(2*re);
+        const midStr=re2x===0?'':(re2x>0?` - ${fmtN(re2x)}x`:` + ${fmtN(Math.abs(re2x))}x`);
+        factors.push(`(x²${midStr} + ${fmtN(sumSq)})`);
+      } else {
+        pushFactor(factors,root);
+      }
+    } else {
+      pushFactor(factors,root);
+    }
+    used.add(root.idx);
+  });
+  const eq=(lead?lead+'·':'')+factors.join('·');
+  document.getElementById('factored-eq').textContent=eq+' = 0';
+}
+
+function pushFactor(factors,root){
+  const r=snapReal(root.re);
+  if(r===0) factors.push('x');
+  else if(r>0) factors.push(`(x - ${fmtN(r)})`);
+  else factors.push(`(x + ${fmtN(Math.abs(r))})`);
+}
+
+// ── GRAPH ─────────────────────────────────────────────────────────────
+function drawGraph(coeffs){
+  const canvas=document.getElementById('graph');
+  const W=canvas.offsetWidth||600;
+  canvas.width=W*2;canvas.height=440;
+  canvas.style.width=W+'px';canvas.style.height='220px';
+  const ctx=canvas.getContext('2d');
+  const w=canvas.width,h=canvas.height;
+
+  // Find roots to centre view
+  const roots=aberthRoots(coeffs);
+  const realRoots=roots.filter(r=>Math.abs(r.i)<0.1).map(r=>r.r);
+
+  let xMin=-5,xMax=5;
+  if(realRoots.length>0){
+    const rMin=Math.min(...realRoots),rMax=Math.max(...realRoots);
+    const span=Math.max(rMax-rMin,2);
+    xMin=rMin-span*0.7;xMax=rMax+span*0.7;
+  }
+
+  // Sample y for range
+  const steps=400;
+  const xs=[],ys=[];
+  for(let s=0;s<=steps;s++){
+    const x=xMin+(xMax-xMin)*s/steps;
+    xs.push(x);
+    const y=polyEval(coeffs,c(x)).r;
+    ys.push(y);
+  }
+  const validY=ys.filter(y=>isFinite(y));
+  let yMin=Math.min(...validY),yMax=Math.max(...validY);
+  const ySpan=yMax-yMin||1;
+  yMin-=ySpan*0.15;yMax+=ySpan*0.15;
+
+  // Clamp extreme values
+  const yRange=yMax-yMin;
+  const clampedYs=ys.map(y=>Math.max(yMin,Math.min(yMax,y)));
+
+  function toCanvas(x,y){
+    return{
+      cx:(x-xMin)/(xMax-xMin)*w,
+      cy:h-(y-yMin)/(yMax-yMin)*h
+    };
+  }
+
+  ctx.clearRect(0,0,w,h);
+
+  // Background
+  ctx.fillStyle='#111827';
+  ctx.fillRect(0,0,w,h);
+
+  // Grid
+  ctx.strokeStyle='rgba(255,255,255,0.04)';
+  ctx.lineWidth=1;
+  const xStep=niceStep((xMax-xMin)/8);
+  const yStep=niceStep((yMax-yMin)/6);
+  for(let x=Math.ceil(xMin/xStep)*xStep;x<=xMax;x+=xStep){
+    const{cx}=toCanvas(x,0);
+    ctx.beginPath();ctx.moveTo(cx,0);ctx.lineTo(cx,h);ctx.stroke();
+  }
+  for(let y=Math.ceil(yMin/yStep)*yStep;y<=yMax;y+=yStep){
+    const{cy}=toCanvas(0,y);
+    ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(w,cy);ctx.stroke();
+  }
+
+  // Axes
+  const origin=toCanvas(0,0);
+  ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=2;
+  if(origin.cx>=0&&origin.cx<=w){ctx.beginPath();ctx.moveTo(origin.cx,0);ctx.lineTo(origin.cx,h);ctx.stroke();}
+  if(origin.cy>=0&&origin.cy<=h){ctx.beginPath();ctx.moveTo(0,origin.cy);ctx.lineTo(w,origin.cy);ctx.stroke();}
+
+  // Axis labels
+  ctx.fillStyle='rgba(148,163,184,0.7)';
+  ctx.font=`${22}px JetBrains Mono, monospace`;
+  ctx.textAlign='center';
+  for(let x=Math.ceil(xMin/xStep)*xStep;x<=xMax;x+=xStep){
+    if(Math.abs(x)<xStep*0.1) continue;
+    const{cx,cy}=toCanvas(x,0);
+    const labelY=Math.min(Math.max(cy+28,20),h-8);
+    ctx.fillText(fmtAxis(x),cx,labelY);
+  }
+  ctx.textAlign='right';
+  for(let y=Math.ceil(yMin/yStep)*yStep;y<=yMax;y+=yStep){
+    if(Math.abs(y)<yStep*0.1) continue;
+    const{cx,cy}=toCanvas(0,y);
+    const labelX=Math.max(cx-12,50);
+    ctx.fillText(fmtAxis(y),labelX,cy+8);
+  }
+
+  // Curve gradient
+  const grad=ctx.createLinearGradient(0,0,w,0);
+  grad.addColorStop(0,'#4f8ef7');
+  grad.addColorStop(0.5,'#a78bfa');
+  grad.addColorStop(1,'#22d3ee');
+
+  ctx.strokeStyle=grad;ctx.lineWidth=4;ctx.lineJoin='round';ctx.lineCap='round';
+  ctx.beginPath();
+  let penDown=false;
+  for(let s=0;s<=steps;s++){
+    const pt=toCanvas(xs[s],clampedYs[s]);
+    // Break line if clipped
+    const orig=ys[s];
+    const clipped=Math.abs(orig-clampedYs[s])>1e-6;
+    if(clipped){penDown=false;continue;}
+    if(!penDown){ctx.moveTo(pt.cx,pt.cy);penDown=true;}
+    else ctx.lineTo(pt.cx,pt.cy);
+  }
+  ctx.stroke();
+
+  // Root markers
+  realRoots.forEach(rx=>{
+    const{cx,cy}=toCanvas(rx,0);
+    ctx.beginPath();
+    ctx.arc(cx,cy,9,0,2*Math.PI);
+    ctx.fillStyle='rgba(52,211,153,0.25)';ctx.fill();
+    ctx.strokeStyle='#34d399';ctx.lineWidth=3;ctx.stroke();
+  });
+
+  // x=0 marker
+  ctx.beginPath();ctx.arc(origin.cx,origin.cy,5,0,2*Math.PI);
+  ctx.fillStyle='rgba(255,255,255,0.15)';ctx.fill();
+}
+
+function niceStep(rough){
+  const pow=Math.pow(10,Math.floor(Math.log10(rough)));
+  const frac=rough/pow;
+  if(frac<1.5) return pow;
+  if(frac<3.5) return 2*pow;
+  if(frac<7.5) return 5*pow;
+  return 10*pow;
+}
+
+function fmtAxis(x){
+  if(Math.abs(x)<1e-10) return '0';
+  if(Number.isInteger(parseFloat(x.toFixed(8)))) return x.toFixed(0);
+  return x.toFixed(1);
+}
+
+// ── EXAMPLES ─────────────────────────────────────────────────────────
+function buildExamples(){
+  const wrap=document.getElementById('example-btns');
+  wrap.innerHTML='';
+  const relevant=examples.filter(e=>e.deg===degree);
+  relevant.forEach(ex=>{
+    const btn=document.createElement('button');btn.className='ex-btn';
+    btn.textContent=ex.label;
+    btn.onclick=()=>loadExample(ex);
+    wrap.appendChild(btn);
+  });
+  if(relevant.length===0) wrap.innerHTML='<span style="font-size:0.78rem;color:var(--text3)">No examples for this degree yet</span>';
+}
+
+function loadExample(ex){
+  setDegree(ex.deg,document.querySelectorAll('.deg-btn')[ex.deg-1]);
+  setTimeout(()=>{
+    ex.coeffs.forEach((v,i)=>{
+      const el=document.getElementById(`c${ex.deg-i}`);
+      if(el) el.value=v;
+    });
+    const constEl=document.getElementById('c0');
+    if(constEl) constEl.value=ex.coeffs[ex.coeffs.length-1];
+    // Fill all correctly
+    for(let i=0;i<=ex.deg;i++){
+      const el=document.getElementById(`c${i}`);
+      if(el) el.value=ex.coeffs[ex.deg-i]||0;
+    }
+    updateEqDisplay();
+    solve();
+  },50);
+}
+
+// Init
+buildInputs();
+</script>
+</body>
+</html>
