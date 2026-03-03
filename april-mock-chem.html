@@ -1,0 +1,2502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>April Mock Chem — AQA A-Level Chemistry</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg2: #0f1320;
+    --bg3: #151b2e;
+    --surface: #1a2236;
+    --surface2: #1e2840;
+    --border: #2a3650;
+    --accent: #4fc3f7;
+    --accent2: #7c4dff;
+    --accent3: #00e5a0;
+    --accent4: #ff6b6b;
+    --accent5: #ffd740;
+    --text: #e8edf5;
+    --text2: #a8b5c8;
+    --text3: #6b7d95;
+    --danger: #ff4757;
+    --success: #2ed573;
+    --warning: #ffa502;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(79,195,247,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,195,247,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- SIDEBAR ---- */
+  #sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 280px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    overflow: hidden;
+  }
+
+  .sidebar-logo {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .sidebar-logo .logo-sub {
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .sidebar-search {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-search input {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 8px 12px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .sidebar-search input:focus { border-color: var(--accent); }
+  .sidebar-search input::placeholder { color: var(--text3); }
+
+  .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+  }
+
+  .sidebar-nav::-webkit-scrollbar { width: 4px; }
+  .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+  .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .nav-section-header {
+    padding: 12px 16px 4px;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 0;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  .nav-item:hover { background: var(--surface); color: var(--text); }
+  .nav-item.active { 
+    background: rgba(79,195,247,0.08); 
+    color: var(--accent); 
+    border-left-color: var(--accent);
+  }
+
+  .nav-item .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .nav-sub {
+    padding-left: 28px;
+    font-size: 12px;
+  }
+
+  .sidebar-footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+    text-align: center;
+  }
+
+  /* ---- MAIN CONTENT ---- */
+  #main {
+    margin-left: 280px;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---- HERO ---- */
+  #hero {
+    padding: 60px 60px 40px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(124,77,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(79,195,247,0.1);
+    border: 1px solid rgba(79,195,247,0.3);
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 20px;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+  }
+
+  .hero-title span {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    color: var(--text2);
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ---- TAB NAV ---- */
+  #tab-nav {
+    display: flex;
+    gap: 0;
+    padding: 0 60px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .tab-btn {
+    padding: 16px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text3);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ---- CONTENT AREA ---- */
+  #content {
+    padding: 40px 60px;
+  }
+
+  /* ---- TOPIC CARD ---- */
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .topic-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .topic-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .topic-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(79,195,247,0.3);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(79,195,247,0.1);
+  }
+
+  .topic-card .card-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+
+  .topic-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .topic-card p {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .card-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    border: 1px solid;
+  }
+
+  .pill-blue { color: var(--accent); border-color: rgba(79,195,247,0.3); background: rgba(79,195,247,0.08); }
+  .pill-green { color: var(--accent3); border-color: rgba(0,229,160,0.3); background: rgba(0,229,160,0.08); }
+  .pill-red { color: var(--accent4); border-color: rgba(255,107,107,0.3); background: rgba(255,107,107,0.08); }
+  .pill-yellow { color: var(--accent5); border-color: rgba(255,215,64,0.3); background: rgba(255,215,64,0.08); }
+  .pill-purple { color: var(--accent2); border-color: rgba(124,77,255,0.3); background: rgba(124,77,255,0.08); }
+
+  /* ---- SECTION PANELS ---- */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(79,195,247,0.1);
+    border: 1px solid rgba(79,195,247,0.2);
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  /* ---- TEACHING NOTES ---- */
+  .teaching-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .teaching-header {
+    padding: 16px 20px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .teaching-header h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .teaching-body {
+    padding: 20px;
+    display: none;
+  }
+
+  .teaching-body.open { display: block; }
+
+  .info-box {
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.7;
+    border-left: 3px solid;
+  }
+
+  .info-box-blue { 
+    background: rgba(79,195,247,0.06); 
+    border-left-color: var(--accent); 
+    color: var(--text); 
+  }
+
+  .info-box-red { 
+    background: rgba(255,107,107,0.06); 
+    border-left-color: var(--accent4); 
+  }
+
+  .info-box-green { 
+    background: rgba(0,229,160,0.06); 
+    border-left-color: var(--accent3); 
+  }
+
+  .info-box-yellow { 
+    background: rgba(255,215,64,0.06); 
+    border-left-color: var(--accent5); 
+  }
+
+  .info-box-purple { 
+    background: rgba(124,77,255,0.06); 
+    border-left-color: var(--accent2); 
+  }
+
+  .info-box-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+    opacity: 0.7;
+  }
+
+  .eq-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent3);
+    margin: 8px 0;
+    position: relative;
+    overflow-x: auto;
+  }
+
+  .eq-box .eq-label {
+    font-size: 9px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* ---- FLASHCARDS ---- */
+  #flashcard-mode {
+    display: none;
+  }
+
+  .fc-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: gap;
+    gap: 12px;
+  }
+
+  .fc-filter {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .fc-filter-btn {
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    cursor: pointer;
+    background: var(--surface);
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .fc-filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .fc-filter-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 600; }
+
+  .fc-progress {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  .flashcard-container {
+    perspective: 1000px;
+    max-width: 700px;
+    margin: 0 auto 32px;
+    height: 360px;
+  }
+
+  .flashcard {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    cursor: pointer;
+  }
+
+  .flashcard.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid var(--border);
+  }
+
+  .card-front {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--bg3) 100%);
+  }
+
+  .card-back {
+    background: linear-gradient(135deg, #0d1f35 0%, #0f1a2e 100%);
+    border-color: rgba(79,195,247,0.2);
+    transform: rotateY(180deg);
+  }
+
+  .card-type-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    display: inline-block;
+    width: fit-content;
+  }
+
+  .card-question {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text);
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .card-hint {
+    font-size: 12px;
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+    margin-top: 16px;
+  }
+
+  .card-answer {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .answer-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .fc-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .fc-btn {
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .fc-btn-correct { background: var(--accent3); color: var(--bg); }
+  .fc-btn-incorrect { background: var(--accent4); color: white; }
+  .fc-btn-skip { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+  .fc-btn-flip { background: var(--accent2); color: white; }
+  .fc-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+  .fc-score-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .score-pill {
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  .score-correct { background: rgba(0,229,160,0.15); color: var(--accent3); }
+  .score-incorrect { background: rgba(255,107,107,0.15); color: var(--accent4); }
+  .score-remaining { background: rgba(79,195,247,0.1); color: var(--accent); }
+
+  /* ---- SPEC CHECKER ---- */
+  #spec-mode { display: none; }
+
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .spec-table th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--bg3);
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .spec-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(42,54,80,0.5);
+    vertical-align: top;
+    line-height: 1.6;
+    color: var(--text2);
+  }
+
+  .spec-table tr:hover td { background: var(--surface); }
+
+  .spec-check {
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .spec-check.checked {
+    background: var(--accent3);
+    border-color: var(--accent3);
+  }
+
+  .spec-check.checked::after {
+    content: '✓';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .confidence-dots {
+    display: flex;
+    gap: 4px;
+  }
+
+  .conf-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .conf-dot.red.active { background: var(--accent4); border-color: var(--accent4); }
+  .conf-dot.yellow.active { background: var(--accent5); border-color: var(--accent5); }
+  .conf-dot.green.active { background: var(--accent3); border-color: var(--accent3); }
+
+  /* ---- OVERVIEW CARDS ---- */
+  .overview-section {
+    margin-bottom: 48px;
+  }
+
+  .overview-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--bg3) 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .overview-banner::after {
+    content: '';
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    opacity: 0.05;
+    background: var(--accent);
+  }
+
+  /* ---- ANIMATIONS ---- */
+  .fade-in {
+    animation: fadeIn 0.4s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide-in {
+    animation: slideIn 0.3s ease forwards;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ---- TOGGLE ---- */
+  .toggle-chevron {
+    transition: transform 0.3s;
+    font-size: 14px;
+    color: var(--text3);
+  }
+
+  .toggle-chevron.open { transform: rotate(180deg); }
+
+  /* ---- SEARCH HIGHLIGHT ---- */
+  .search-highlight { background: rgba(255,215,64,0.25); border-radius: 2px; }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 900px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #hero { padding: 40px 24px 30px; }
+    .hero-title { font-size: 36px; }
+    #content { padding: 24px; }
+    #tab-nav { padding: 0 24px; overflow-x: auto; }
+  }
+
+  /* ---- REQUIRED PRACTICAL BADGE ---- */
+  .rp-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,167,2,0.1);
+    border: 1px solid rgba(255,167,2,0.3);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--warning);
+    font-weight: 500;
+  }
+
+  .a-star-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,215,64,0.1);
+    border: 1px solid rgba(255,215,64,0.3);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--accent5);
+    font-weight: 500;
+  }
+
+  /* ---- MOBILE TOGGLE BUTTON ---- */
+  #menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 200;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: var(--text);
+    font-size: 18px;
+  }
+
+  @media (max-width: 900px) { #menu-toggle { display: block; } }
+
+  ul { padding-left: 20px; }
+  ul li { margin-bottom: 4px; color: var(--text2); font-size: 13px; line-height: 1.6; }
+  strong { color: var(--text); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<button id="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">April Mock Chem</div>
+    <div class="logo-sub">AQA A-Level Chemistry · A/A* Prep</div>
+  </div>
+  <div class="sidebar-search">
+    <input type="text" id="search-input" placeholder="Search topics..." oninput="handleSearch(this.value)">
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav">
+    <div class="nav-section-header">Overview</div>
+    <div class="nav-item active" onclick="showTab('overview')">
+      <span class="nav-dot" style="background:#4fc3f7"></span> Dashboard
+    </div>
+    <div class="nav-item" onclick="showTab('flashcards')">
+      <span class="nav-dot" style="background:#7c4dff"></span> Flashcards
+    </div>
+    <div class="nav-item" onclick="showTab('spec')">
+      <span class="nav-dot" style="background:#00e5a0"></span> Spec Checker
+    </div>
+
+    <div class="nav-section-header">Physical Chemistry</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('atomic-structure')">1.1 Atomic Structure</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('amount')">1.2 Amount of Substance</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('bonding')">1.3 Bonding</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('energetics')">1.4 Energetics</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('kinetics')">1.5 Kinetics</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('equilibria')">1.6 Equilibria</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('redox')">1.7 Redox</div>
+
+    <div class="nav-section-header">Inorganic Chemistry</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('periodicity')">2.1 Periodicity</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('group2')">2.2 Group 2</div>
+
+    <div class="nav-section-header">Organic Chemistry</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('intro-organic')">3.1 Intro & Mechanisms</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('alkanes')">3.2 Alkanes</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('halogenoalkanes')">3.3 Halogenoalkanes</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('alkenes')">3.4 Alkenes</div>
+    <div class="nav-item nav-sub" onclick="navigateTo('alcohols')">3.5 Alcohols</div>
+  </nav>
+  <div class="sidebar-footer">Created by Noah Wilde</div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <!-- HERO -->
+  <div id="hero">
+    <div class="hero-badge">AQA Chemistry · Year 12</div>
+    <h1 class="hero-title">April Mock<br><span>Chem</span></h1>
+    <p class="hero-sub">Complete AQA A-Level Chemistry revision. Full spec coverage with teaching notes, flashcards, and examiner traps. Engineered for A/A* students.</p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">12</div>
+        <div class="stat-label">Topics</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">Flashcards</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Required Practicals</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">A*</div>
+        <div class="stat-label">Target</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB NAV -->
+  <div id="tab-nav">
+    <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="showTab('notes')">Teaching Notes</button>
+    <button class="tab-btn" onclick="showTab('flashcards')">Flashcards</button>
+    <button class="tab-btn" onclick="showTab('spec')">Spec Checker</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content">
+
+    <!-- ===================== OVERVIEW ===================== -->
+    <div id="overview-mode" class="fade-in">
+      <div class="overview-section">
+        <div class="section-header" style="margin-top:8px">
+          <span class="section-num">YEAR 12</span>
+          <h2 class="section-title">Physical Chemistry</h2>
+        </div>
+        <div class="topic-grid">
+          <div class="topic-card" onclick="navigateTo('atomic-structure')" style="--card-color:#4fc3f7">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4fc3f7,#7c4dff);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">1.1 · Physical</div>
+            <h3>Atomic Structure</h3>
+            <p>Fundamental particles, mass spectrometry, electron configuration, ionisation energies.</p>
+            <div class="card-pills">
+              <span class="pill pill-blue">Calculations</span>
+              <span class="pill pill-red">IE Trends</span>
+              <span class="pill pill-green">TOF Mass Spec</span>
+            </div>
+          </div>
+          <div class="topic-card" onclick="navigateTo('amount')" >
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#00e5a0,#4fc3f7);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">1.2 · Physical</div>
+            <h3>Amount of Substance</h3>
+            <p>Moles, Avogadro constant, ideal gas equation, empirical formula, titrations, atom economy.</p>
+            <div class="card-pills">
+              <span class="pill pill-green">pV=nRT</span>
+              <span class="pill pill-yellow">RP1: Titration</span>
+              <span class="pill pill-blue">Calculations</span>
+            </div>
+          </div>
+          <div class="topic-card" onclick="navigateTo('bonding')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7c4dff,#ff6b6b);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">1.3 · Physical</div>
+            <h3>Bonding</h3>
+            <p>Ionic, covalent, metallic bonding. Crystal structures. VSEPR. Intermolecular forces. Electronegativity.</p>
+            <div class="card-pills">
+              <span class="pill pill-purple">VSEPR</span>
+              <span class="pill pill-red">H-bonding</span>
+              <span class="pill pill-blue">Structures</span>
+            </div>
+          </div>
+          <div class="topic-card" onclick="navigateTo('energetics')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ff6b6b,#ffd740);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">1.4 · Physical</div>
+            <h3>Energetics</h3>
+            <p>Enthalpy changes, calorimetry, Hess's law, bond enthalpies.</p>
+            <div class="card-pills">
+              <span class="pill pill-red">q=mcΔT</span>
+              <span class="pill pill-yellow">RP2: Calorimetry</span>
+              <span class="pill pill-green">Hess's Law</span>
+            </div>
+          </div>
+          <div class="topic-card" onclick="navigateTo('kinetics')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ffd740,#00e5a0);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">1.5 · Physical</div>
+            <h3>Kinetics</h3>
+            <p>Collision theory, Maxwell-Boltzmann, temperature & concentration effects, catalysts.</p>
+            <div class="card-pills">
+              <span class="pill pill-yellow">M-B Distribution</span>
+              <span class="pill pill-green">Catalysts</span>
+              <span class="pill pill-blue">Activation Energy</span>
+            </div>
+          </div>
+          <div class="topic-card" onclick="navigateTo('equilibria')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4fc3f7,#00e5a0);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">1.6 · Physical</div>
+            <h3>Equilibria</h3>
+            <p>Le Chatelier's principle, equilibrium constant Kc, industrial applications.</p>
+            <div class="card-pills">
+              <span class="pill pill-blue">Kc expressions</span>
+              <span class="pill pill-purple">Le Chatelier</span>
+              <span class="pill pill-green">Calculations</span>
+            </div>
+          </div>
+          <div class="topic-card" onclick="navigateTo('redox')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ff6b6b,#7c4dff);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">1.7 · Physical</div>
+            <h3>Redox</h3>
+            <p>Oxidation states, half-equations, balancing redox reactions.</p>
+            <div class="card-pills">
+              <span class="pill pill-red">OIL RIG</span>
+              <span class="pill pill-blue">Half-equations</span>
+              <span class="pill pill-purple">Ox States</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <span class="section-num">YEAR 12</span>
+          <h2 class="section-title">Inorganic Chemistry</h2>
+        </div>
+        <div class="topic-grid">
+          <div class="topic-card" onclick="navigateTo('periodicity')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#00e5a0,#4fc3f7);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">2.1 · Inorganic</div>
+            <h3>Periodicity</h3>
+            <p>s, p, d, f blocks. Periodic trends across Period 3.</p>
+            <div class="card-pills">
+              <span class="pill pill-green">Blocks</span>
+              <span class="pill pill-blue">Trends</span>
+            </div>
+          </div>
+          <div class="topic-card" onclick="navigateTo('group2')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7c4dff,#4fc3f7);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">2.2 · Inorganic</div>
+            <h3>Group 2</h3>
+            <p>Reactions with water, solubility trends of hydroxides & sulfates, industrial uses.</p>
+            <div class="card-pills">
+              <span class="pill pill-purple">Solubility Trends</span>
+              <span class="pill pill-blue">BaSO4 test</span>
+              <span class="pill pill-red">Reactions</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <span class="section-num">YEAR 12</span>
+          <h2 class="section-title">Organic Chemistry</h2>
+        </div>
+        <div class="topic-grid">
+          <div class="topic-card" onclick="navigateTo('intro-organic')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ffd740,#ff6b6b);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">3.1 · Organic</div>
+            <h3>Intro & Mechanisms</h3>
+            <p>IUPAC nomenclature, structural formulas, free-radical and curly arrow mechanisms, isomerism.</p>
+            <div class="card-pills">
+              <span class="pill pill-yellow">IUPAC</span>
+              <span class="pill pill-red">Free Radical</span>
+              <span class="pill pill-purple">E/Z Isomers</span>
+            </div>
+          </div>
+          <div class="topic-card" onclick="navigateTo('alkanes')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4fc3f7,#7c4dff);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">3.2 · Organic</div>
+            <h3>Alkanes</h3>
+            <p>Fractional distillation, cracking, combustion, free-radical substitution with Cl₂.</p>
+            <div class="card-pills">
+              <span class="pill pill-blue">Cracking</span>
+              <span class="pill pill-red">Free Radical Sub</span>
+              <span class="pill pill-green">Combustion</span>
+            </div>
+          </div>
+          <div class="topic-card" onclick="navigateTo('halogenoalkanes')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ff6b6b,#ffd740);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">3.3 · Organic</div>
+            <h3>Halogenoalkanes</h3>
+            <p>Nucleophilic substitution, elimination, ozone depletion by CFCs.</p>
+            <div class="card-pills">
+              <span class="pill pill-red">SN mechanisms</span>
+              <span class="pill pill-yellow">Elimination</span>
+              <span class="pill pill-purple">Ozone</span>
+            </div>
+          </div>
+          <div class="topic-card" onclick="navigateTo('alkenes')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#00e5a0,#7c4dff);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">3.4 · Organic</div>
+            <h3>Alkenes</h3>
+            <p>Electrophilic addition, Markovnikov's rule, carbocation stability, addition polymers.</p>
+            <div class="card-pills">
+              <span class="pill pill-green">Electrophilic Add</span>
+              <span class="pill pill-purple">Carbocations</span>
+              <span class="pill pill-blue">Polymers</span>
+            </div>
+          </div>
+          <div class="topic-card" onclick="navigateTo('alcohols')">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ffd740,#4fc3f7);border-radius:16px 16px 0 0"></div>
+            <div class="card-tag">3.5 · Organic</div>
+            <h3>Alcohols</h3>
+            <p>Production (fermentation & hydration), oxidation products, elimination. RP5: Distillation.</p>
+            <div class="card-pills">
+              <span class="pill pill-yellow">RP5: Distillation</span>
+              <span class="pill pill-red">Oxidation</span>
+              <span class="pill pill-green">Biofuel debate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== NOTES MODE ===================== -->
+    <div id="notes-mode" style="display:none" class="fade-in">
+
+      <!-- 1.1 ATOMIC STRUCTURE -->
+      <div id="atomic-structure" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">1.1</span>
+          <h2 class="section-title">Atomic Structure</h2>
+        </div>
+
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.1.1 Fundamental Particles</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Teaching Notes</div>
+              Atoms consist of a nucleus (protons + neutrons) surrounded by electrons. Know the relative charges and masses exactly — these are common fill-in-the-table questions.
+              <br><br>
+              <strong>Proton:</strong> relative mass = 1, charge = +1<br>
+              <strong>Neutron:</strong> relative mass = 1, charge = 0<br>
+              <strong>Electron:</strong> relative mass = 1/1836 (≈0), charge = −1
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Trap</div>
+              <strong>Do NOT say electrons have "negligible mass" unless pushed</strong> — say relative mass ≈ 1/1836 or "approximately zero." AQA may penalise vague language. Also: electrons are in shells/orbitals around the nucleus, not "orbiting" like planets.
+            </div>
+            <div class="info-box info-box-yellow">
+              <div class="info-box-label">★ A* Insight</div>
+              The discovery of subatomic particles evolved over time: Thomson's plum-pudding model → Rutherford's nuclear model (gold foil experiment) → Bohr's quantised shells → quantum mechanical model. AQA expects appreciation that atomic models develop as new evidence emerges.
+            </div>
+          </div>
+        </div>
+
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.1.2 Mass Number, Isotopes & TOF Mass Spectrometry</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Teaching Notes</div>
+              <strong>Mass number (A)</strong> = protons + neutrons<br>
+              <strong>Atomic number (Z)</strong> = number of protons<br>
+              <strong>Isotopes</strong> = same element (same Z), different mass number (different neutron count). Same chemical properties (same electron config), different physical properties (different mass).
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">TOF Mass Spectrometer Steps (ELECTROSPRAY)</span>
+              1. Ionisation: sample dissolved; H⁺ added → [M+H]⁺ ions formed<br>
+              2. Acceleration: ions accelerated by electric field → same KE<br>
+              3. Ion Drift: ions travel through field-free region (drift tube)<br>
+              4. Detection: lighter ions arrive first (faster); detector records arrival time<br>
+              5. Data Analysis: time → m/z ratio → mass
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">Relative Atomic Mass (from mass spectrum)</span>
+              Ar = Σ(isotope mass × relative abundance) / Σ(relative abundances)
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>In electrospray ionisation, ions formed are [M+H]⁺ not M⁺ — the m/z peak is one more than Mr.</li>
+                <li>Lighter ions travel faster and arrive at the detector first (inverse relationship).</li>
+                <li>Mass spectrometry gives m/z ratio, not just mass — most singly charged ions so z=1.</li>
+                <li>Relative isotopic mass ≠ mass number (real masses are not whole numbers).</li>
+              </ul>
+            </div>
+            <div class="info-box info-box-yellow">
+              <div class="info-box-label">★ A* Insight</div>
+              All ions are given the same kinetic energy (½mv² = constant). Rearranging: v = √(2KE/m). Thus velocity is inversely proportional to √m. This is why TOF works — it's essentially a race where lighter ions win. This physics underpins the whole technique.
+            </div>
+          </div>
+        </div>
+
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.1.3 Electron Configuration & Ionisation Energies</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Teaching Notes</div>
+              Electrons fill orbitals in order of increasing energy: 1s 2s 2p 3s 3p 3d 4s 4p...<br>
+              Within a subshell, electrons occupy orbitals singly before pairing (Hund's rule).<br><br>
+              <strong>Key anomalies (Z ≤ 36):</strong> Cr = [Ar] 3d⁵ 4s¹ (not 3d⁴ 4s²) and Cu = [Ar] 3d¹⁰ 4s¹ (not 3d⁹ 4s²) — extra stability from half-full/full d subshells.<br><br>
+              <strong>First ionisation energy:</strong> energy required to remove 1 mole of electrons from 1 mole of gaseous atoms to form 1 mole of +1 gaseous ions.
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">First IE equation (must write correctly)</span>
+              X(g) → X⁺(g) + e⁻    ΔH = 1st IE (always positive/endothermic)
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">Successive IEs — sharp jumps reveal shell structure</span>
+              Large jump between 2nd and 3rd IE → element is in Group 2<br>
+              Large jump between 3rd and 4th IE → element is in Group 3
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li><strong>State symbols are essential</strong> — X(g) not X(s) or X(l) in IE equations.</li>
+                <li>IE always refers to gaseous atoms — never mention solution.</li>
+                <li>Mg has higher 1st IE than Al: Mg has full 3s² (harder to remove); Al has 3p¹ (shielded by 3s, easier to remove).</li>
+                <li>S has lower 1st IE than P: S has paired electron in 3p (repulsion makes removal easier).</li>
+                <li>Successive IEs always increase — never decrease.</li>
+              </ul>
+            </div>
+            <div class="info-box info-box-yellow">
+              <div class="info-box-label">★ A* Insight</div>
+              The dip in 1st IE from Be→B and from N→O are AQA's favourite graph questions. Be→B: going from full 2s² to 2p¹ — 2p is higher energy and shielded by the 2s electrons. N→O: O has a paired 3p electron experiencing electron-electron repulsion, reducing the energy needed to remove it. Understand the trend, not just the exception.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.2 AMOUNT OF SUBSTANCE -->
+      <div id="amount" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">1.2</span>
+          <h2 class="section-title">Amount of Substance</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.2.1–1.2.2 Moles, Ar, Mr & Avogadro</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Teaching Notes</div>
+              <strong>Relative atomic mass (Ar)</strong>: the weighted mean mass of an atom relative to 1/12 the mass of ¹²C.<br>
+              <strong>Relative molecular mass (Mr)</strong>: sum of all Ar values in a molecule (relative to ¹²C).<br>
+              <strong>Relative formula mass</strong>: used for ionic compounds (not Mr).<br><br>
+              <strong>1 mole</strong> = 6.02 × 10²³ particles (Avogadro's constant, Nₐ) — given in exam.
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">Key Equations</span>
+              n = m / Mr &nbsp;&nbsp;|&nbsp;&nbsp; n = c × V &nbsp;&nbsp;|&nbsp;&nbsp; n = N / Nₐ
+              <br>where n = moles, m = mass (g), Mr = relative molecular mass, c = concentration (mol dm⁻³), V = volume (dm³), N = number of particles
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Trap</div>
+              Volume must be in <strong>dm³</strong> for n = cV. 1 dm³ = 1000 cm³. Divide cm³ by 1000. This catches students every paper.
+            </div>
+            <div class="info-box info-box-yellow">
+              <div class="info-box-label">★ A* Insight</div>
+              Ar values are not whole numbers because they are weighted means across isotopes. Carbon's Ar = 12.011, not exactly 12, because of the small natural abundance of ¹³C. This is why mass spectrometry is essential for precise measurement.
+            </div>
+          </div>
+        </div>
+
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.2.3 Ideal Gas Equation</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="eq-box">
+              <span class="eq-label">Ideal Gas Equation (R given in exam)</span>
+              pV = nRT<br>
+              p = pressure (Pa), V = volume (m³), n = moles, R = 8.314 J mol⁻¹K⁻¹, T = temperature (K)
+            </div>
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Application</div>
+              <strong>Finding Mr of volatile liquid:</strong> Weigh known mass of liquid → vaporise → measure V, T, p → calculate n from pV=nRT → Mr = m/n.
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>Pressure in <strong>Pa</strong> (not kPa or atm). 1 atm = 101,325 Pa; 100 kPa = 100,000 Pa.</li>
+                <li>Volume in <strong>m³</strong> (not dm³ or cm³). 1 dm³ = 0.001 m³; 1 cm³ = 10⁻⁶ m³.</li>
+                <li>Temperature in <strong>Kelvin</strong>. T(K) = T(°C) + 273. Room temperature ≈ 293 K, not 293°C!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.2.4–1.2.5 Empirical/Molecular Formula, Yield & Atom Economy <span class="rp-badge">RP1</span></h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Teaching Notes</div>
+              <strong>Empirical formula:</strong> simplest whole number ratio of atoms.<br>
+              <strong>Molecular formula:</strong> actual number of each atom.<br>
+              Relationship: molecular formula = n × empirical formula (find n from Mr).
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">Key Equations</span>
+              % yield = (actual moles of product / theoretical moles) × 100<br><br>
+              % atom economy = (Mr of desired product / sum of Mr of all reactants) × 100<br><br>
+              Empirical formula method: divide % by Ar → divide by smallest → round to whole numbers
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Trap</div>
+              Atom economy uses Mr of <strong>all</strong> reactants (including ones not in desired product), not just what's consumed. A 100% yield can still have poor atom economy if many by-products are formed.
+            </div>
+            <div class="info-box info-box-yellow">
+              <div class="info-box-label">★ A* Insight</div>
+              Atom economy is a "green chemistry" metric. High atom economy reactions are better for sustainable chemistry because fewer resources are wasted and less waste disposal is required. AQA loves 6-mark evaluation questions on this.
+            </div>
+            <div class="info-box info-box-green">
+              <div class="info-box-label">⚗️ Required Practical 1: Titration</div>
+              Make up a volumetric solution from a solid → pipette alkali into conical flask → add indicator → add acid from burette until colour change (end point) → record titre. Repeat for concordant results (within 0.10 cm³). Rinse burette with acid, pipette with alkali. Wash conical flask with distilled water only.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.3 BONDING -->
+      <div id="bonding" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">1.3</span>
+          <h2 class="section-title">Bonding</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.3.1–1.3.3 Types of Chemical Bonding</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Teaching Notes</div>
+              <strong>Ionic:</strong> electrostatic attraction between oppositely charged ions in a lattice. Transfer of electrons. Metal + non-metal.<br><br>
+              <strong>Covalent:</strong> shared pair of electrons between two atoms. Both atoms contribute one electron each. Shown by a line in structures.<br><br>
+              <strong>Dative (coordinate) covalent:</strong> both electrons come from the same atom. Shown by an arrow (→). Same bond strength as ordinary covalent once formed. Examples: NH₄⁺ (from NH₃ + H⁺), Al₂Cl₆, H₃O⁺.<br><br>
+              <strong>Metallic:</strong> delocalised electrons in a sea between positive metal ions arranged in a lattice.
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Trap</div>
+              In NH₄⁺, once the dative bond forms, all N–H bonds become <strong>identical</strong> — there's no way to distinguish which one was dative. Students lose marks by implying one N–H bond is different. Also: BF₃ is electron-deficient (only 6 electrons around B), which is why it accepts a lone pair in dative bonding.
+            </div>
+            <div class="info-box info-box-yellow">
+              <div class="info-box-label">★ A* Insight</div>
+              Metallic bonding strength increases with: (1) more delocalised electrons per atom (e.g. Mg²⁺ stronger than Na⁺), (2) smaller ionic radius (more charge density). This explains why Mg has a higher melting point than Na, and why Group 2 metals are generally harder and denser.
+            </div>
+          </div>
+        </div>
+
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.3.4 Crystal Structures & Physical Properties</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="two-col">
+              <div class="info-box info-box-blue" style="margin:0">
+                <div class="info-box-label">Diamond (macromolecular)</div>
+                Each C bonded to 4 others (tetrahedral). Very high MP. No free e⁻ → no electrical conductivity. Hard. Used as abrasive.
+              </div>
+              <div class="info-box info-box-blue" style="margin:0">
+                <div class="info-box-label">Graphite (macromolecular)</div>
+                Each C bonded to 3 others in layers. 1 delocalised e⁻ per C → conducts electricity. Layers held by van der Waals → slippery/lubricant. High MP (strong C-C bonds throughout).
+              </div>
+              <div class="info-box info-box-blue" style="margin:0">
+                <div class="info-box-label">Ice (molecular)</div>
+                H₂O held by hydrogen bonds. Open lattice structure → lower density than liquid water. Relatively low MP.
+              </div>
+              <div class="info-box info-box-blue" style="margin:0">
+                <div class="info-box-label">Iodine (molecular)</div>
+                I₂ molecules held by van der Waals forces. Low MP. Non-conductor. Slightly soluble in organic solvents.
+              </div>
+              <div class="info-box info-box-blue" style="margin:0">
+                <div class="info-box-label">NaCl (ionic)</div>
+                6:6 coordination. High MP (strong electrostatic forces). Conducts when molten or dissolved (free ions). Doesn't conduct when solid.
+              </div>
+              <div class="info-box info-box-blue" style="margin:0">
+                <div class="info-box-label">Magnesium (metallic)</div>
+                Mg²⁺ ions in sea of delocalised electrons. Good conductor. Malleable/ductile. Moderate-high MP.
+              </div>
+            </div>
+            <div class="info-box info-box-red" style="margin-top:12px">
+              <div class="info-box-label">⚠️ Common Misconception</div>
+              Graphite conducts electricity because it has delocalised electrons — <strong>not</strong> because "layers can slide." Sliding refers to its lubricant properties (physical), not electrical conductivity. Keep these separate in your answers.
+            </div>
+          </div>
+        </div>
+
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.3.5 VSEPR & Molecular Shapes</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Repulsion Order & Shapes</div>
+              Lone pair–lone pair > lone pair–bond pair > bond pair–bond pair<br><br>
+              <strong>2 bonding pairs:</strong> linear, 180°<br>
+              <strong>3 bp, 0 lp:</strong> trigonal planar, 120° (e.g. BF₃)<br>
+              <strong>4 bp, 0 lp:</strong> tetrahedral, 109.5° (e.g. CH₄)<br>
+              <strong>3 bp, 1 lp:</strong> pyramidal, ~107° (e.g. NH₃)<br>
+              <strong>2 bp, 2 lp:</strong> bent/V-shaped, ~104.5° (e.g. H₂O)<br>
+              <strong>5 bp, 0 lp:</strong> trigonal bipyramidal, 90°/120°<br>
+              <strong>6 bp, 0 lp:</strong> octahedral, 90°
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>Always state bond angle AND name of shape — one without the other loses marks.</li>
+                <li>CO₂ is linear (180°) — two double bonds, no lone pairs on C. Don't confuse with SO₂ which is bent (one lone pair on S).</li>
+                <li>PCl₅ is trigonal bipyramidal — there are TWO different bond angles (90° and 120°). Must state both.</li>
+                <li>In XeF₄ — 4 bp + 2 lp = square planar. The two lone pairs position themselves opposite each other to minimise repulsion.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.3.6–1.3.7 Polarity & Intermolecular Forces</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Teaching Notes</div>
+              <strong>Electronegativity</strong>: power of an atom to attract the bonding pair in a covalent bond (Pauling scale). Increases across period, decreases down group. F > O > N > Cl > C.<br><br>
+              <strong>Polar bond:</strong> unequal sharing → δ+ and δ- partial charges.<br>
+              <strong>Polar molecule:</strong> polar bonds + asymmetric arrangement → net dipole.<br>
+              <strong>Non-polar molecule:</strong> polar bonds + symmetric arrangement → dipoles cancel (e.g. CO₂, CCl₄).
+            </div>
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Intermolecular Forces (weakest → strongest)</div>
+              <strong>van der Waals (London dispersion):</strong> all molecules. Caused by instantaneous dipoles inducing temporary dipoles. Strength increases with: more electrons, greater surface area, longer chain.<br><br>
+              <strong>Permanent dipole-dipole:</strong> between polar molecules. Additional to vdW.<br><br>
+              <strong>Hydrogen bonding:</strong> between H bonded to F, O, or N AND a lone pair on F, O, or N of another molecule. Strongest intermolecular force. Causes anomalously high BP of H₂O, HF, NH₃.
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>H-bonds form between H (bonded to F/O/N) and a lone pair on F/O/N — students often forget to mention the lone pair.</li>
+                <li>CO₂ is non-polar despite having polar C=O bonds because the molecule is linear and dipoles cancel. CCl₄ is similarly non-polar.</li>
+                <li>Ice is less dense than water because H-bonds hold molecules in an open lattice with more space between molecules.</li>
+                <li>van der Waals are present in ALL molecules, even non-polar ones. They are not exclusive to non-polar molecules.</li>
+              </ul>
+            </div>
+            <div class="info-box info-box-yellow">
+              <div class="info-box-label">★ A* Insight</div>
+              The anomalously high boiling points of H₂O, HF, and NH₃ compared to their Group 6, 7, and 5 hydride series are direct evidence for hydrogen bonding. A* students can sketch a graph of BP vs period for Group 6 hydrides and explain the divergence at H₂O.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.4 ENERGETICS -->
+      <div id="energetics" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">1.4</span>
+          <h2 class="section-title">Energetics</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.4.1–1.4.2 Enthalpy Changes & Calorimetry <span class="rp-badge">RP2</span></h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Standard Conditions & Definitions</div>
+              Standard conditions: 100 kPa pressure, specified temperature (usually 298 K).<br><br>
+              <strong>ΔcH⊖ (standard enthalpy of combustion):</strong> ΔH when 1 mole of a substance is completely burned in oxygen under standard conditions. Always exothermic (negative).<br><br>
+              <strong>ΔfH⊖ (standard enthalpy of formation):</strong> ΔH when 1 mole of a compound is formed from its elements in their standard states. ΔfH⊖ of elements = 0 by definition.
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">Calorimetry</span>
+              q = mcΔT<br>
+              q = heat change (J), m = mass of solution (g), c = specific heat capacity (J g⁻¹ K⁻¹, given), ΔT = temperature change (K or °C, same magnitude)<br><br>
+              Then: ΔH = −q / n &nbsp;&nbsp;(negative because exothermic reactions warm the surroundings)
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>Use mass of <strong>solution</strong>, not solute, in q=mcΔT. For dilute solutions, assume density ≈ 1 g/cm³.</li>
+                <li>The sign of ΔH: if temperature <em>rises</em>, reaction is exothermic → ΔH is <strong>negative</strong>.</li>
+                <li>Standard enthalpy of combustion must be for 1 mole of <strong>fuel</strong>, not products.</li>
+                <li>Calorimetry values are inaccurate because: heat is lost to surroundings, incomplete combustion, evaporation of fuel.</li>
+              </ul>
+            </div>
+            <div class="info-box info-box-green">
+              <div class="info-box-label">⚗️ Required Practical 2: Enthalpy by Calorimetry</div>
+              Add measured volumes of solution to insulated polystyrene cup. Record initial temperatures. Mix solutions and record maximum (exothermic) or minimum (endothermic) temperature. Calculate q = mcΔT → ΔH per mole. Sources of error: heat loss to surroundings, incomplete reaction, thermometer accuracy.
+            </div>
+          </div>
+        </div>
+
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.4.3–1.4.4 Hess's Law & Bond Enthalpies</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Hess's Law</div>
+              The total enthalpy change for a reaction is independent of the route taken — it depends only on the initial and final states (consequence of conservation of energy).<br><br>
+              <strong>Via formation:</strong> ΔHreaction = ΣΔfH⊖(products) − ΣΔfH⊖(reactants)<br>
+              <strong>Via combustion:</strong> ΔHreaction = ΣΔcH⊖(reactants) − ΣΔcH⊖(products) [note: reversed for products]
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">Bond Enthalpy Method</span>
+              ΔH = Σ(bonds broken) − Σ(bonds formed)<br>
+              Bond breaking: ENDOTHERMIC (+)<br>
+              Bond forming: EXOTHERMIC (−)<br><br>
+              Gives APPROXIMATE ΔH because mean bond enthalpies are averages across many different molecules/environments.
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>Bond enthalpy calculations are ALWAYS approximate because mean values are used. Hess's law gives exact values (for the specific compounds used).</li>
+                <li>In Hess's law via combustion: the formula is REVERSED — use combustion enthalpies of reactants MINUS products (not the other way around).</li>
+                <li>ΔfH⊖ of all elements in standard states = 0 (e.g. O₂(g), C(s) graphite, H₂(g)).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.5 KINETICS -->
+      <div id="kinetics" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">1.5</span>
+          <h2 class="section-title">Kinetics</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.5.1–1.5.5 Collision Theory, M-B Distribution & Catalysts</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Teaching Notes</div>
+              Reactions occur when particles collide with <strong>sufficient energy</strong> (≥ activation energy, Ea) AND with the <strong>correct orientation</strong>.<br><br>
+              <strong>Increasing rate:</strong> increase temperature → more particles have E ≥ Ea (and more frequent collisions); increase concentration/pressure → more frequent collisions; add catalyst → lowers Ea.<br><br>
+              <strong>Catalyst:</strong> increases rate without being consumed. Provides alternative reaction pathway with lower activation energy.
+            </div>
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Maxwell-Boltzmann Distribution</div>
+              Curve starts at origin (no molecules with zero energy), rises to a peak (most probable energy), then tails to the right (few high-energy molecules). Curve never touches x-axis at high energy end.<br><br>
+              <strong>Effect of temperature increase:</strong> curve shifts right and flattens. Peak moves right. Area under curve = total number of molecules (constant). Area to the right of Ea increases → more molecules can react.
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>When explaining temperature effect on rate: must mention (1) more frequent collisions AND (2) greater proportion of molecules with E ≥ Ea. Many students only give one reason.</li>
+                <li>A catalyst lowers Ea — it does NOT increase the energy of the reactants.</li>
+                <li>On M-B diagrams: the curve must NOT touch the y-axis at zero (molecules have some minimum energy), and must NOT touch the x-axis (asymptotic).</li>
+                <li>The area under a M-B curve is constant (fixed number of molecules) — when temperature rises, the curve flattens but area stays the same.</li>
+                <li>Increasing concentration increases collision frequency, NOT the energy of collisions.</li>
+              </ul>
+            </div>
+            <div class="info-box info-box-yellow">
+              <div class="info-box-label">★ A* Insight</div>
+              A small temperature increase (e.g. +10°C) causes a disproportionately large rate increase. This is because the M-B distribution has a tail: a small shift in temperature dramatically increases the proportion of molecules with E ≥ Ea. This non-linear relationship explains why biological enzymes operate in very narrow temperature ranges.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.6 EQUILIBRIA -->
+      <div id="equilibria" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">1.6</span>
+          <h2 class="section-title">Equilibria & Kc</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.6.1–1.6.2 Le Chatelier's Principle & Kc</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Dynamic Equilibrium</div>
+              A reversible reaction at equilibrium has: forward and reverse rates equal; concentrations of reactants and products constant (not equal). The position can shift but Kc only changes with temperature.
+            </div>
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Le Chatelier's Principle</div>
+              If a system at equilibrium is disturbed, it will shift to oppose the change.<br><br>
+              <strong>Increase concentration of reactant:</strong> equilibrium shifts right (towards products).<br>
+              <strong>Increase pressure:</strong> equilibrium shifts towards fewer moles of gas.<br>
+              <strong>Increase temperature:</strong> equilibrium shifts in endothermic direction (absorbs heat). Also INCREASES Kc if forward reaction is endothermic, DECREASES Kc if exothermic.<br>
+              <strong>Catalyst:</strong> equilibrium position unchanged; Kc unchanged; equilibrium reached faster.
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">Kc Expression — for aA + bB ⇌ cC + dD</span>
+              Kc = [C]ᶜ[D]ᵈ / [A]ᵃ[B]ᵇ<br><br>
+              Units: determined from the expression. e.g. if Kc = [C]²/[A][B], units = (mol dm⁻³)²/(mol dm⁻³)² = dimensionless
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>Kc is ONLY affected by temperature. Not by concentration, pressure, or catalyst.</li>
+                <li>A catalyst increases rate of BOTH forward and reverse reactions equally — position of equilibrium unchanged.</li>
+                <li>In industrial processes (e.g. Haber), the compromise conditions balance rate (kinetics) vs yield (thermodynamics). High pressure increases yield AND rate; high temperature increases rate but DECREASES yield for exothermic reactions.</li>
+                <li>Kc units must be calculated — do NOT assume dimensionless.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.7 REDOX -->
+      <div id="redox" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">1.7</span>
+          <h2 class="section-title">Oxidation, Reduction & Redox</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>1.7 Oxidation States & Half-Equations</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Oxidation State Rules</div>
+              1. Elements = 0<br>2. Simple ions = charge (e.g. Na⁺ = +1)<br>3. O = −2 (except peroxides: −1; OF₂: +2)<br>4. H = +1 (except metal hydrides: −1)<br>5. F = −1 always<br>6. Sum of ox states = overall charge of species
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">Half-Equations Method</span>
+              1. Write species being oxidised/reduced<br>
+              2. Balance atoms (add H₂O for O, H⁺ for H in acidic solution)<br>
+              3. Balance charge by adding e⁻<br>
+              4. Combine half-equations: cancel electrons<br><br>
+              OIL RIG: Oxidation Is Loss (of e⁻), Reduction Is Gain (of e⁻)
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>Oxidation state of Cl in Cl₂ = 0, in HCl = −1, in NaClO = +1, in ClO₃⁻ = +5, in ClO₄⁻ = +7.</li>
+                <li>Mn in MnO₄⁻ = +7, in MnO₂ = +4, in Mn²⁺ = +2. Frequent source of marks.</li>
+                <li>In disproportionation, the same element is simultaneously oxidised and reduced (e.g. Cl₂ + NaOH).</li>
+                <li>When combining half-equations, multiply each so electrons cancel exactly — do NOT add electrons to both sides.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.1 PERIODICITY -->
+      <div id="periodicity" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">2.1</span>
+          <h2 class="section-title">Periodicity</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>2.1.1 s, p, d, f Blocks & Classification</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Teaching Notes</div>
+              An element's block is determined by which subshell its highest energy electron occupies:<br>
+              <strong>s-block:</strong> Groups 1 & 2 (last electron in s subshell)<br>
+              <strong>p-block:</strong> Groups 3–7 & 0 (last electron in p subshell)<br>
+              <strong>d-block (transition metals):</strong> filling 3d subshell (Sc–Zn, periods 4+)<br>
+              <strong>f-block:</strong> lanthanides and actinides
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Trap</div>
+              He is in Group 0 but is an s-block element (1s² configuration). H is also s-block. Zn and Cd: 3d¹⁰ full, technically d-block but often not classified as transition metals (no variable oxidation states in compounds).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.2 GROUP 2 -->
+      <div id="group2" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">2.2</span>
+          <h2 class="section-title">Group 2 — Alkaline Earth Metals</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>2.2 Trends, Reactions & Applications</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Trends (Mg → Ba)</div>
+              <strong>Atomic radius:</strong> increases ↓ group (more shells)<br>
+              <strong>1st IE:</strong> decreases ↓ group (greater shielding, larger radius, easier to remove electron)<br>
+              <strong>Melting point:</strong> generally decreases ↓ group (less charge density → weaker metallic bonding), though not perfectly regular.
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">Reactions with Water</span>
+              Mg + H₂O → no reaction (cold water); Mg + H₂O(steam) → MgO + H₂<br>
+              Ca + 2H₂O → Ca(OH)₂ + H₂ (slow, some bubbling)<br>
+              Sr/Ba + 2H₂O → Sr(OH)₂/Ba(OH)₂ + H₂ (vigorous)
+            </div>
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Hydroxide & Sulfate Solubility Trends</div>
+              <strong>Hydroxides:</strong> solubility INCREASES down group. Mg(OH)₂ sparingly soluble → Ba(OH)₂ soluble.<br>
+              <strong>Sulfates:</strong> solubility DECREASES down group. MgSO₄ soluble → BaSO₄ insoluble.<br><br>
+              Uses: Mg(OH)₂ — antacid medicine. Ca(OH)₂ — agriculture (neutralise acidic soil). BaSO₄ — barium meal (X-ray contrast, safe due to insolubility). CaO/CaCO₃ — remove SO₂ from flue gases.
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>BaCl₂ test for sulfate ions must be acidified with dilute HCl to prevent false positives from Ba²⁺ reacting with CO₃²⁻ or SO₃²⁻.</li>
+                <li>Mg does NOT react with cold water — only steam.</li>
+                <li>Hydroxide solubility INCREASES down group; sulfate solubility DECREASES — students frequently confuse these two.</li>
+                <li>Mg is used to extract Ti from TiCl₄ (displacement): TiCl₄ + 2Mg → Ti + 2MgCl₂. Mg is the reducing agent.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.1 INTRO ORGANIC -->
+      <div id="intro-organic" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">3.1</span>
+          <h2 class="section-title">Introduction to Organic Chemistry</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>3.1.1 Nomenclature & 3.1.2 Mechanisms</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Representation Types</div>
+              <strong>Empirical:</strong> simplest ratio (e.g. CH₂)<br>
+              <strong>Molecular:</strong> actual numbers (e.g. C₄H₈)<br>
+              <strong>General:</strong> CₙH₂ₙ for alkenes<br>
+              <strong>Structural:</strong> CH₃CH₂CH₂CH₃<br>
+              <strong>Displayed:</strong> shows all bonds as lines<br>
+              <strong>Skeletal:</strong> zig-zag, carbon at each vertex, H implied
+            </div>
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Curly Arrow Conventions</div>
+              <strong>Curly arrow:</strong> shows movement of electron pair. Starts from lone pair or bond, points to where electrons go.<br>
+              <strong>Fishhook arrow:</strong> shows movement of single electron (radical mechanisms).<br>
+              Free radical mechanisms: do NOT use curly arrows — write equations only.
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Trap</div>
+              Curly arrows must start from the correct place (lone pair or bond) and end at the correct place. Arrows pointing the wrong way lose marks. In radical mechanisms, explicitly show dots for unpaired electrons and write each step (initiation, propagation, termination) separately.
+            </div>
+          </div>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>3.1.3 Isomerism — Structural & E/Z</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Types of Isomerism</div>
+              <strong>Structural isomers:</strong> same molecular formula, different structural formula. Types: chain (different carbon skeleton), position (same functional group, different position), functional group (different functional group).<br><br>
+              <strong>Stereoisomers:</strong> same structural formula, different arrangement in space.<br>
+              <strong>E/Z (geometric) isomerism:</strong> due to restricted rotation around C=C double bond. Requires two different groups on each carbon of the C=C. Use CIP priority rules (higher atomic number → higher priority) to assign E (opposite, Entgegen) or Z (same side, Zusammen).
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Trap</div>
+              E/Z isomerism requires BOTH carbons of the double bond to have two DIFFERENT substituents. If one carbon has two identical groups (e.g. CH₂=), E/Z isomerism is not possible. Do not confuse E/Z with cis/trans — E/Z is the correct AQA terminology.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.2 ALKANES -->
+      <div id="alkanes" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">3.2</span>
+          <h2 class="section-title">Alkanes</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>3.2.1–3.2.4 Cracking, Combustion & Free-Radical Substitution</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Cracking</div>
+              <strong>Thermal cracking:</strong> high temp (700–1200°C), high pressure, no catalyst. Produces alkenes (for polymer industry).<br>
+              <strong>Catalytic cracking:</strong> high temp (~450°C), slight pressure, zeolite catalyst. Mainly produces motor fuels and aromatic hydrocarbons.<br>
+              Economic reason: long-chain alkanes less in demand; cracking makes shorter, more useful chains.
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">Free-Radical Substitution of Methane + Cl₂ (UV light)</span>
+              INITIATION: Cl₂ → 2Cl• (UV breaks Cl-Cl bond homolytically)<br>
+              PROPAGATION 1: Cl• + CH₄ → HCl + CH₃•<br>
+              PROPAGATION 2: CH₃• + Cl₂ → CH₃Cl + Cl•<br>
+              TERMINATION: Cl• + Cl• → Cl₂ (or CH₃• + Cl• → CH₃Cl, or CH₃• + CH₃• → C₂H₆)
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>The initiation step requires UV light/photons — thermal energy alone is insufficient.</li>
+                <li>In propagation, the radical is <strong>regenerated</strong> — this is how the chain continues.</li>
+                <li>Termination requires two radicals combining — write all three possible termination steps if asked.</li>
+                <li>Multiple products form (CH₂Cl₂, CHCl₃, CCl₄) because propagation can continue — this is a limitation of the reaction (poor selectivity).</li>
+                <li>Bond breaking in initiation is <strong>homolytic</strong> — each atom gets one electron. Write Cl• not Cl⁻.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.3 HALOGENOALKANES -->
+      <div id="halogenoalkanes" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">3.3</span>
+          <h2 class="section-title">Halogenoalkanes</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>3.3.1 Nucleophilic Substitution</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Teaching Notes</div>
+              C–X bond is polar (δ+C – δ–X) because X is more electronegative. This makes the C susceptible to attack by nucleophiles.<br><br>
+              <strong>Nucleophile:</strong> species with a lone pair that donates electrons to form a bond. OH⁻, CN⁻, NH₃.<br><br>
+              Reactions: with OH⁻ (aq) → alcohol; with CN⁻ → nitrile (chain lengthened by 1C); with NH₃ (excess) → amine.
+            </div>
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Effect of C–X Bond Enthalpy on Rate</div>
+              C–F bond strongest → slowest hydrolysis<br>
+              C–Cl bond<br>
+              C–Br bond<br>
+              C–I bond weakest → fastest hydrolysis<br>
+              This is NOT about electronegativity — it's bond <strong>enthalpy</strong> (ease of bond breaking) that determines rate.
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Trap</div>
+              Students often say "fluoroalkanes react fastest because F is most electronegative and the bond is most polar." This is WRONG. The C–F bond is so strong that despite being very polar, it hydrolyses slowest. Bond enthalpy determines rate, not polarity.
+            </div>
+          </div>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>3.3.2–3.3.3 Elimination & Ozone Depletion</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Elimination</div>
+              Halogenoalkane + KOH(alc) + heat → alkene + KX + H₂O<br>
+              KOH acts as a BASE (not nucleophile): accepts H⁺ from adjacent C while halide leaves. Requires concentrated KOH in ethanol (not aqueous — aqueous favours substitution).
+            </div>
+            <div class="eq-box">
+              <span class="eq-label">CFC Ozone Depletion</span>
+              UV causes: CF₂Cl₂ → CF₂Cl• + Cl• (C–Cl bond breaks, not C–F — weaker bond)<br>
+              Cl• + O₃ → ClO• + O₂<br>
+              ClO• + O₃ → 2O₂ + Cl• (Cl• regenerated → catalytic cycle)
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Trap</div>
+              Cl• is a catalyst — it is regenerated and not consumed overall. Each Cl• can destroy thousands of ozone molecules. C–Cl bond breaks (not C–F) because C–F is stronger. Must write Cl• with dot to show radical.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.4 ALKENES -->
+      <div id="alkenes" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">3.4</span>
+          <h2 class="section-title">Alkenes</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>3.4.1–3.4.3 Structure, Addition Reactions & Polymers</h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Electrophilic Addition Mechanism</div>
+              The C=C double bond has high electron density (π bond above and below the σ bond). This attracts electrophiles (electron-deficient species).<br><br>
+              <strong>With Br₂:</strong> Br₂ is polarised by the π electrons → Brδ+–Brδ– → Brδ+ attacks C=C → bromonium intermediate → Br⁻ attacks → dibromoalkane. Bromine water decolorises (orange → colourless) = test for unsaturation.<br><br>
+              <strong>With HBr:</strong> H⁺ attacks C=C → carbocation intermediate → Br⁻ attacks carbocation. For unsymmetrical alkenes: H⁺ adds to C with more H atoms (Markovnikov's rule) → forms more stable (more substituted) carbocation.
+            </div>
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Carbocation Stability</div>
+              3° > 2° > 1° > methyl (primary)<br>
+              More alkyl groups donate electrons → stabilise the positive charge → lower energy carbocation → forms preferentially (major product).
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>In electrophilic addition mechanisms, curly arrows must start from the π bond (or lone pair) and end at the electrophile. The arrow from C=C must originate from the bond, not from one carbon.</li>
+                <li>The major product in Markovnikov addition is determined by <strong>carbocation stability</strong>, not just "more hydrogens." Link explicitly to 3° > 2° > 1° stability.</li>
+                <li>H₂SO₄ addition: HSO₄⁻ is the nucleophile attacking the carbocation (not just "sulfuric acid adds").</li>
+              </ul>
+            </div>
+            <div class="info-box info-box-yellow">
+              <div class="info-box-label">★ A* Insight</div>
+              Tertiary carbocations are more stable because alkyl groups are electron-donating (by hyperconjugation and inductive effect). This lowers the positive charge concentration on the central carbon. The more stabilised intermediate forms faster (lower activation energy), leading to the major product.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.5 ALCOHOLS -->
+      <div id="alcohols" class="overview-section">
+        <div class="section-header">
+          <span class="section-num">3.5</span>
+          <h2 class="section-title">Alcohols</h2>
+        </div>
+        <div class="teaching-block">
+          <div class="teaching-header" onclick="toggleBlock(this)">
+            <h4>3.5.1–3.5.3 Production, Oxidation & Elimination <span class="rp-badge">RP5</span></h4>
+            <span class="toggle-chevron">▼</span>
+          </div>
+          <div class="teaching-body open">
+            <div class="two-col">
+              <div class="info-box info-box-blue" style="margin:0">
+                <div class="info-box-label">Fermentation</div>
+                Glucose → ethanol + CO₂<br>
+                C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂<br>
+                Conditions: yeast (enzyme), 25–35°C, anaerobic (no oxygen), pH ≈ 6. Ethanol separated by fractional distillation.
+              </div>
+              <div class="info-box info-box-blue" style="margin:0">
+                <div class="info-box-label">Catalytic Hydration</div>
+                Ethene + steam → ethanol<br>
+                CH₂=CH₂ + H₂O → C₂H₅OH<br>
+                Conditions: conc. H₃PO₄ catalyst, 300°C, 65 atm. Continuous process, higher purity.
+              </div>
+            </div>
+            <div class="info-box info-box-blue" style="margin-top:12px">
+              <div class="info-box-label">📖 Oxidation of Alcohols</div>
+              Oxidising agent: acidified K₂Cr₂O₇ (orange → green when reduced to Cr³⁺).<br><br>
+              <strong>Primary alcohol → aldehyde</strong> (distil product off immediately) or<br>
+              <strong>Primary alcohol → carboxylic acid</strong> (reflux with excess oxidising agent).<br>
+              <strong>Secondary alcohol → ketone</strong> (reflux).<br>
+              <strong>Tertiary alcohol → NO reaction</strong> (no H on carbon bearing OH).
+            </div>
+            <div class="info-box info-box-blue">
+              <div class="info-box-label">📖 Distinguishing Aldehyde from Ketone</div>
+              <strong>Tollens' reagent:</strong> silver mirror with aldehyde; no change with ketone.<br>
+              <strong>Fehling's solution:</strong> brick-red precipitate with aldehyde; no change with ketone.<br>
+              Both: aldehyde is oxidised to carboxylic acid; ketone cannot be oxidised under mild conditions.
+            </div>
+            <div class="info-box info-box-red">
+              <div class="info-box-label">⚠️ Examiner Traps</div>
+              <ul>
+                <li>To obtain aldehyde: distil product immediately to remove it from the reaction mixture before it's further oxidised.</li>
+                <li>Tertiary alcohols do NOT react with acidified dichromate — no colour change is the observation.</li>
+                <li>Biofuel debate: ethanol from fermentation is NOT truly carbon neutral because of energy used in distillation, fertilisers, transport, and land use change. AQA expects a balanced evaluation.</li>
+              </ul>
+            </div>
+            <div class="info-box info-box-green">
+              <div class="info-box-label">⚗️ Required Practical 5: Distillation</div>
+              Preparation of cyclohexene from cyclohexanol via acid-catalysed elimination. Setup: round-bottom flask, anti-bumping granules, thermometer at side arm, condenser, collection flask. Purify: separating funnel (wash with Na₂CO₃ to remove acid, then with CaCl₂ to remove water), dry with anhydrous CaCl₂, distil and collect fraction at correct BP.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- end notes-mode -->
+
+    <!-- ===================== FLASHCARD MODE ===================== -->
+    <div id="flashcard-mode" class="fade-in">
+      <div class="fc-controls">
+        <div class="fc-filter" id="fc-filter">
+          <button class="fc-filter-btn active" onclick="filterCards('all', this)">All</button>
+          <button class="fc-filter-btn" onclick="filterCards('definition', this)">Definitions</button>
+          <button class="fc-filter-btn" onclick="filterCards('calculation', this)">Calculations</button>
+          <button class="fc-filter-btn" onclick="filterCards('mechanism', this)">Mechanisms</button>
+          <button class="fc-filter-btn" onclick="filterCards('examtrap', this)">Examiner Traps</button>
+          <button class="fc-filter-btn" onclick="filterCards('practical', this)">Practicals</button>
+          <button class="fc-filter-btn" onclick="filterCards('astar', this)">A* Insights</button>
+        </div>
+        <div class="fc-progress" id="fc-progress">Card 1 of 0</div>
+      </div>
+
+      <div class="fc-score-bar">
+        <span class="score-pill score-correct">✓ <span id="score-correct">0</span> correct</span>
+        <span class="score-pill score-incorrect">✗ <span id="score-incorrect">0</span> incorrect</span>
+        <span class="score-pill score-remaining">◐ <span id="score-remaining">0</span> remaining</span>
+      </div>
+
+      <div class="flashcard-container" onclick="flipCard()">
+        <div class="flashcard" id="flashcard">
+          <div class="card-face card-front">
+            <span class="card-type-tag" id="card-type-display" style="background:rgba(79,195,247,0.1);color:#4fc3f7;border:1px solid rgba(79,195,247,0.3)">Definition</span>
+            <div class="card-question" id="card-question">Loading...</div>
+            <div class="card-hint">Click to reveal answer</div>
+          </div>
+          <div class="card-face card-back">
+            <span class="answer-label">MODEL ANSWER</span>
+            <div class="card-answer" id="card-answer">Answer here</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc-actions">
+        <button class="fc-btn fc-btn-incorrect" onclick="markCard(false)">✗ Incorrect</button>
+        <button class="fc-btn fc-btn-flip" onclick="flipCard()">↺ Flip</button>
+        <button class="fc-btn fc-btn-skip" onclick="nextCard()">→ Skip</button>
+        <button class="fc-btn fc-btn-correct" onclick="markCard(true)">✓ Correct</button>
+      </div>
+
+      <div style="text-align:center;margin-top:16px">
+        <button class="fc-btn fc-btn-skip" onclick="shuffleCards()" style="margin:4px">⇄ Shuffle</button>
+        <button class="fc-btn fc-btn-skip" onclick="resetCards()" style="margin:4px">↺ Reset</button>
+      </div>
+    </div>
+
+    <!-- ===================== SPEC CHECKER ===================== -->
+    <div id="spec-mode" class="fade-in">
+      <div style="margin-bottom:20px">
+        <h3 style="font-family:'Syne',sans-serif;font-size:20px;margin-bottom:8px">AQA Specification Checklist</h3>
+        <p style="color:var(--text2);font-size:13px">Track every specification point. Rate your confidence for each topic.</p>
+      </div>
+      <div id="spec-table-container"></div>
+    </div>
+
+  </div> <!-- end content -->
+</div> <!-- end main -->
+
+<script>
+// ========== FLASHCARD DATA ==========
+const allCards = [
+  // ---- 1.1 ATOMIC STRUCTURE ----
+  { type:'definition', topic:'1.1', q:'Define first ionisation energy.', a:'The energy required to remove one mole of electrons from one mole of gaseous atoms to form one mole of singly charged positive ions in the gaseous state. Always endothermic (+ve). Equation: X(g) → X⁺(g) + e⁻' },
+  { type:'definition', topic:'1.1', q:'What is an isotope?', a:'Atoms of the same element (same proton number / atomic number Z) with different mass numbers, due to having different numbers of neutrons. Isotopes have the same chemical properties but different physical properties (different mass, density, boiling point).' },
+  { type:'definition', topic:'1.1', q:'What are the relative charge and mass of a proton, neutron, and electron?', a:'Proton: mass = 1, charge = +1\nNeutron: mass = 1, charge = 0\nElectron: mass ≈ 0 (1/1836), charge = −1' },
+  { type:'definition', topic:'1.1', q:'Define relative atomic mass (Ar).', a:'The weighted mean mass of an atom of an element relative to one-twelfth the mass of an atom of carbon-12.' },
+  { type:'definition', topic:'1.1', q:'What is the electron configuration of Cu (Z=29)?', a:'[Ar] 3d¹⁰ 4s¹ — NOT [Ar] 3d⁹ 4s². Extra stability from full 3d subshell. Also: Cr = [Ar] 3d⁵ 4s¹ for similar reasons (half-full d).' },
+  { type:'calculation', topic:'1.1', q:'Chlorine has isotopes ³⁵Cl (75%) and ³⁷Cl (25%). Calculate Ar.', a:'Ar = (35 × 75 + 37 × 25) / 100 = (2625 + 925) / 100 = 3550 / 100 = 35.5\n\nMethod: Σ(mass × relative abundance) ÷ Σ(abundances). When given as percentages, divide by 100.' },
+  { type:'examtrap', topic:'1.1', q:'Why is the 1st ionisation energy of Mg HIGHER than that of Al, despite Al coming after Mg?', a:'Mg has a full 3s² sub-shell which is particularly stable. Al has a 3p¹ electron which is (1) at a higher energy level and (2) shielded by the 3s electrons — making it easier to remove. So Al has a lower 1st IE than Mg.' },
+  { type:'examtrap', topic:'1.1', q:'Why is the 1st IE of S lower than that of P?', a:'Both have 3p electrons. P has 3p³ (one electron per orbital, no repulsion). S has 3p⁴ with one orbital containing a paired electron. The electron-electron repulsion in the pair makes it easier to remove one electron from S.' },
+  { type:'examtrap', topic:'1.1', q:'In a TOF mass spectrometer using electrospray ionisation, the m/z peak appears at 181. What is the Mr?', a:'In electrospray ionisation, molecules gain an H⁺ ion, forming [M+H]⁺. So the peak at m/z = 181 corresponds to Mr = 181 − 1 = 180. This is a classic trap — the observed m/z is one MORE than Mr.' },
+  { type:'mechanism', topic:'1.1', q:'List the 5 stages of a TOF mass spectrometer in order.', a:'1. IONISATION (electrospray: add H⁺ → [M+H]⁺ ions)\n2. ACCELERATION (electric field gives all ions same KE: ½mv²)\n3. ION DRIFT (field-free region; lighter ions travel faster: v = √(2KE/m))\n4. ION DETECTION (lighter ions arrive first)\n5. DATA ANALYSIS (flight time → m/z → mass)' },
+  { type:'astar', topic:'1.1', q:'(A*) Why do lighter ions in a TOF spectrometer arrive at the detector first?', a:'All ions are given the same kinetic energy: KE = ½mv². Therefore v = √(2KE/m). Since KE is constant, velocity is inversely proportional to √m. Lighter ions have greater velocity and travel across the drift tube faster, arriving at the detector first.' },
+
+  // ---- 1.2 AMOUNT OF SUBSTANCE ----
+  { type:'definition', topic:'1.2', q:'Define the mole.', a:'The amount of substance that contains 6.02 × 10²³ (Avogadro\'s constant, Nₐ) particles (atoms, molecules, ions, electrons, or formula units).' },
+  { type:'calculation', topic:'1.2', q:'How do you convert cm³ to dm³, and why does it matter?', a:'Divide by 1000. 1 dm³ = 1000 cm³. It matters because the equation n = c × V requires volume in dm³. This is the most common unit error on AQA papers. 25 cm³ = 0.025 dm³.' },
+  { type:'calculation', topic:'1.2', q:'Calculate the number of moles in 4.4 g of CO₂.', a:'Mr(CO₂) = 12 + 16 + 16 = 44 g mol⁻¹\nn = m / Mr = 4.4 / 44 = 0.10 mol\n(also contains 0.10 × 6.02×10²³ = 6.02×10²² molecules)' },
+  { type:'calculation', topic:'1.2', q:'State the ideal gas equation and the SI units for each variable.', a:'pV = nRT\np = pressure in Pa (pascals)\nV = volume in m³\nn = amount in mol\nR = 8.314 J mol⁻¹ K⁻¹ (given)\nT = temperature in K (add 273 to °C)' },
+  { type:'examtrap', topic:'1.2', q:'What are the three unit traps in the ideal gas equation pV = nRT?', a:'1. Pressure must be in Pa — convert atm (×101325) or kPa (×1000)\n2. Volume must be in m³ — divide cm³ by 10⁶, divide dm³ by 1000\n3. Temperature must be in K — add 273 to °C\nForgetting even ONE unit conversion gives a completely wrong answer.' },
+  { type:'definition', topic:'1.2', q:'Define percentage atom economy and explain why it matters.', a:'% atom economy = (Mr of desired product / sum of Mr of all reactants) × 100\n\nIt measures how much of the reactant mass ends up in the desired product. High atom economy = less waste = more sustainable = lower production costs. AQA may ask for an evaluation of green chemistry benefits.' },
+  { type:'definition', topic:'1.2', q:'Define empirical formula and molecular formula.', a:'Empirical formula: the simplest whole number ratio of atoms of each element in a compound (e.g. CH₂O).\nMolecular formula: the actual number of atoms of each element in a molecule (e.g. C₆H₁₂O₆). It is a whole number multiple of the empirical formula.' },
+  { type:'calculation', topic:'1.2', q:'A compound is 40.0% C, 6.67% H, 53.3% O. Find the empirical formula.', a:'Divide by Ar: C = 40/12 = 3.33, H = 6.67/1 = 6.67, O = 53.3/16 = 3.33\nDivide by smallest (3.33): C = 1, H = 2, O = 1\nEmpirical formula: CH₂O\n(Check: if Mr known, find molecular formula by n = Mr / Mr(emp))' },
+  { type:'practical', topic:'1.2', q:'(RP1) Describe how to perform a titration to find the concentration of an unknown acid.', a:'1. Pipette exactly 25.0 cm³ of alkali into conical flask. Add appropriate indicator.\n2. Fill burette with acid, record initial reading.\n3. Add acid dropwise near endpoint. Swirl constantly.\n4. Record endpoint (colour change is permanent for ≥30 seconds).\n5. Repeat for concordant results (within 0.10 cm³).\nNote: Rinse burette with acid, pipette with alkali, conical flask with distilled water only.' },
+
+  // ---- 1.3 BONDING ----
+  { type:'definition', topic:'1.3', q:'What is a dative (coordinate) covalent bond and how is it shown?', a:'A covalent bond in which BOTH electrons come from the same atom (the donor). It has the same strength as an ordinary covalent bond once formed. Shown in diagrams using an arrow (→) pointing from the donor atom to the acceptor. Example: NH₃ + H⁺ → NH₄⁺ (N donates lone pair to H⁺).' },
+  { type:'examtrap', topic:'1.3', q:'Once NH₄⁺ has formed, how many types of N–H bond are present?', a:'Only ONE type — all four N–H bonds are identical once formed. The dative bond cannot be distinguished from the ordinary covalent bonds. Students who say "3 covalent bonds and 1 dative bond" lose marks.' },
+  { type:'definition', topic:'1.3', q:'State the order of electron pair repulsions (VSEPR) and explain the consequence.', a:'Lone pair–lone pair > lone pair–bond pair > bond pair–bond pair (repulsion decreases in this order).\nConsequence: lone pairs take up more space → reduce bond angles. CH₄ = 109.5°, NH₃ ≈ 107° (1 lp), H₂O ≈ 104.5° (2 lp).' },
+  { type:'definition', topic:'1.3', q:'What three conditions must be met for hydrogen bonding?', a:'1. A hydrogen atom covalently bonded to F, O, or N (the H must be directly bonded)\n2. A lone pair on F, O, or N of another molecule\n3. Sufficient electronegativity difference (F, O, N are sufficiently electronegative to make H δ+)\nH-bonds are stronger than vdW or permanent dipole-dipole forces, but weaker than covalent or ionic bonds.' },
+  { type:'examtrap', topic:'1.3', q:'Why does ice float on water? Answer in terms of structure.', a:'Water molecules form a fixed, open tetrahedral H-bonded lattice in ice. Each molecule makes 4 H-bonds (at fixed angles). This arrangement means molecules are further apart than in liquid water. So ice is less dense than liquid water and floats.\n\nDo NOT just say "ice is less dense" — explain the structural reason (open H-bond lattice).' },
+  { type:'examtrap', topic:'1.3', q:'Why does graphite conduct electricity but diamond does not?', a:'Graphite: each C forms 3 covalent bonds in layers, leaving 1 delocalised electron per carbon. These delocalised electrons are free to move and carry charge → electrical conductor.\nDiamond: each C forms 4 covalent bonds (tetrahedral). No free electrons or ions → does not conduct. Do NOT confuse electrical conductivity with the sliding of layers (that explains lubrication, not conductivity).' },
+  { type:'definition', topic:'1.3', q:'What is electronegativity and how does it change across Period 3 and down Group 7?', a:'Electronegativity: the power of an atom to attract the shared pair of electrons in a covalent bond (Pauling scale).\nAcross a period: increases (more protons, same shielding → stronger nuclear attraction).\nDown a group: decreases (more electron shells → greater shielding and distance → weaker attraction).\nF > O > N > Cl > C (most electronegative elements).' },
+  { type:'examtrap', topic:'1.3', q:'CO₂ has polar C=O bonds. Why is CO₂ non-polar overall?', a:'CO₂ is a linear molecule (O=C=O, 180°). The two C=O dipoles are equal and opposite, so they cancel out → zero net dipole → non-polar molecule.\nCompare with SO₂: bent molecule (V-shaped, lone pair on S) → dipoles do NOT cancel → polar molecule.\nShape determines whether bond dipoles cancel.' },
+  { type:'astar', topic:'1.3', q:'(A*) Why do the boiling points of Group 6 hydrides increase: H₂O >> H₂Te > H₂Se > H₂S?', a:'H₂S, H₂Se, H₂Te: only van der Waals forces. BPs increase going DOWN (more electrons → stronger vdW). The trend would predict H₂O to have the LOWEST BP — but it has the HIGHEST. This anomaly is evidence for hydrogen bonding in H₂O, which is much stronger than vdW and requires more energy to overcome.' },
+
+  // ---- 1.4 ENERGETICS ----
+  { type:'definition', topic:'1.4', q:'Define standard enthalpy of combustion (ΔcH⊖).', a:'The enthalpy change when one mole of a substance is completely burned in excess oxygen under standard conditions (100 kPa, specified temperature, usually 298 K), with all substances in their standard states. Always exothermic (negative value).' },
+  { type:'definition', topic:'1.4', q:'Define standard enthalpy of formation (ΔfH⊖). What is the value for an element?', a:'The enthalpy change when one mole of a compound is formed from its elements in their standard states under standard conditions. ΔfH⊖ for any element in its standard state = 0 by definition (e.g. O₂(g) = 0, C(s) graphite = 0, H₂(g) = 0).' },
+  { type:'calculation', topic:'1.4', q:'State the calorimetry equation and explain each term.', a:'q = mcΔT\nq = heat transferred (joules, J)\nm = mass of solution (grams, g) — use mass of solution, not just solute\nc = specific heat capacity (J g⁻¹ K⁻¹, given in exam)\nΔT = temperature change (K or °C — same magnitude)\nThen ΔH (kJ mol⁻¹) = −q / n (negative sign: exothermic reaction warms surroundings)' },
+  { type:'examtrap', topic:'1.4', q:'A student measures ΔH for combustion of ethanol by burning it under a copper calorimeter. Why is the experimental value less exothermic than the data book value?', a:'The experimental value has significant heat losses:\n• Heat lost to surroundings (air) — not insulated\n• Incomplete combustion (less energy released)\n• Evaporation of ethanol before combustion\n• Heat absorbed by the can/thermometer itself\nThese all mean less heat reaches the water → smaller ΔT → less negative calculated ΔH.' },
+  { type:'definition', topic:'1.4', q:'State Hess\'s Law.', a:'The total enthalpy change of a reaction is independent of the route taken, provided the initial and final states are the same. This is a consequence of conservation of energy.' },
+  { type:'calculation', topic:'1.4', q:'How do you calculate ΔHreaction using enthalpies of formation?', a:'ΔHreaction = Σ ΔfH⊖(products) − Σ ΔfH⊖(reactants)\n\nRemember: multiply each ΔfH⊖ by the stoichiometric coefficient in the balanced equation. Elements in their standard states have ΔfH⊖ = 0 so they do not contribute.' },
+  { type:'examtrap', topic:'1.4', q:'Why do bond enthalpy calculations give APPROXIMATE values for ΔH, while Hess\'s law gives EXACT values?', a:'Bond enthalpies are MEAN values averaged across many different compounds containing that bond. The actual bond enthalpy in a specific molecule differs slightly from the mean. Hess\'s law uses precise measured enthalpies for the specific substances, so gives the true value for that reaction.' },
+  { type:'calculation', topic:'1.4', q:'CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(g). Using bond enthalpies: C–H=412, O=O=497, C=O=805, O–H=464. Calculate ΔH.', a:'Bonds broken (endothermic): 4×C–H + 2×O=O = 4(412) + 2(497) = 1648 + 994 = 2642 kJ\nBonds formed (exothermic): 2×C=O + 4×O–H = 2(805) + 4(464) = 1610 + 1856 = 3466 kJ\nΔH = 2642 − 3466 = −824 kJ mol⁻¹\n(Bonds broken positive; bonds formed negative)' },
+
+  // ---- 1.5 KINETICS ----
+  { type:'definition', topic:'1.5', q:'Define activation energy (Ea).', a:'The minimum energy required for a collision between reactant molecules to result in a reaction. Only collisions with energy ≥ Ea result in products forming. Measured in kJ mol⁻¹.' },
+  { type:'examtrap', topic:'1.5', q:'Explain, in terms of the Maxwell-Boltzmann distribution, why a small temperature increase causes a large rate increase.', a:'At higher temperature:\n1. The distribution curve shifts to the right (higher average energy)\n2. The peak flattens (area under curve stays constant = fixed number of molecules)\n3. Crucially, the proportion of molecules with energy ≥ Ea increases significantly\n4. There are also more frequent collisions (higher average speed)\nBoth effects increase rate. The disproportionately large rate increase is because even a small shift in the distribution greatly increases the area to the right of Ea.' },
+  { type:'examtrap', topic:'1.5', q:'How does a catalyst increase rate? What does it NOT do?', a:'A catalyst provides an ALTERNATIVE REACTION PATHWAY with a LOWER ACTIVATION ENERGY. More molecules have sufficient energy to react → greater proportion of successful collisions → increased rate.\n\nA catalyst does NOT: increase temperature, increase energy of reactants, change the position of equilibrium, or change Kc. It speeds up reaching equilibrium but doesn\'t alter the equilibrium position.' },
+  { type:'definition', topic:'1.5', q:'What two conditions must be met for a collision to be successful (result in reaction)?', a:'1. The colliding molecules must have energy GREATER THAN OR EQUAL TO the activation energy (E ≥ Ea).\n2. The molecules must collide with the CORRECT ORIENTATION (reactive parts must face each other).\n\nBoth conditions are required — a high-energy collision with wrong orientation does not lead to reaction.' },
+
+  // ---- 1.6 EQUILIBRIA ----
+  { type:'definition', topic:'1.6', q:'What is meant by dynamic equilibrium?', a:'A state in which the forward and reverse reactions occur at the same rate, so the concentrations of reactants and products remain constant (not necessarily equal). Both reactions continue — hence "dynamic." Only possible in a closed system.' },
+  { type:'definition', topic:'1.6', q:'State Le Chatelier\'s Principle.', a:'If a system at dynamic equilibrium is subjected to a change, the equilibrium will shift in the direction that tends to oppose the change.' },
+  { type:'examtrap', topic:'1.6', q:'How does a catalyst affect: (a) rate of equilibrium attainment, (b) equilibrium position, (c) Kc?', a:'(a) Rate of attainment: INCREASES — provides lower Ea for both forward and reverse reactions equally.\n(b) Equilibrium position: UNCHANGED — the same position is reached, just faster.\n(c) Kc: UNCHANGED — Kc only changes with temperature.\n\nA catalyst helps reach equilibrium faster but does not change where the equilibrium lies.' },
+  { type:'examtrap', topic:'1.6', q:'What is the only factor that changes the value of Kc?', a:'TEMPERATURE ONLY. Changes in concentration, pressure, or addition of a catalyst do NOT change Kc.\n\nFor an exothermic forward reaction: increasing T decreases Kc (equilibrium shifts left).\nFor an endothermic forward reaction: increasing T increases Kc (equilibrium shifts right).' },
+  { type:'calculation', topic:'1.6', q:'For N₂(g) + 3H₂(g) ⇌ 2NH₃(g), write the Kc expression and determine its units.', a:'Kc = [NH₃]² / ([N₂][H₂]³)\n\nUnits: (mol dm⁻³)² / (mol dm⁻³)(mol dm⁻³)³ = (mol dm⁻³)² / (mol dm⁻³)⁴ = mol⁻² dm⁶\n\nRemember: calculate units each time — they differ for each equilibrium.' },
+  { type:'astar', topic:'1.6', q:'(A*) In the Haber process, why are conditions of 450°C and 200 atm used rather than more extreme conditions?', a:'TEMPERATURE (450°C compromise):\n• Lower T → higher yield (reaction is exothermic, shifts right) but rate too slow\n• Higher T → faster rate but Kc decreases (lower yield, less NH₃)\n• 450°C balances acceptable rate with reasonable yield\n\nPRESSURE (200 atm compromise):\n• Higher P → greater yield (fewer moles of gas on product side) AND faster rate\n• But very high P is expensive (high-pressure vessels, maintenance) and dangerous\n• 200 atm is economically viable\n\nCATALYST (Fe + promoters): allows acceptable rate at lower temperature, reducing energy costs.' },
+
+  // ---- 1.7 REDOX ----
+  { type:'definition', topic:'1.7', q:'Define oxidation and reduction in terms of electron transfer.', a:'Oxidation: loss of electrons (or increase in oxidation state). The species oxidised is the REDUCING AGENT (it donates electrons).\nReduction: gain of electrons (or decrease in oxidation state). The species reduced is the OXIDISING AGENT (it accepts electrons).\nMemory: OIL RIG (Oxidation Is Loss, Reduction Is Gain).' },
+  { type:'calculation', topic:'1.7', q:'What are the oxidation states of Mn in: MnO₄⁻, MnO₂, and Mn²⁺?', a:'MnO₄⁻: Mn + 4(−2) = −1 → Mn = +7\nMnO₂: Mn + 2(−2) = 0 → Mn = +4\nMn²⁺: Mn = +2\nThese are extremely commonly examined. Know them.' },
+  { type:'calculation', topic:'1.7', q:'What are the oxidation states of Cl in: Cl₂, HCl, NaClO, ClO₃⁻, and ClO₄⁻?', a:'Cl₂: 0 (element)\nHCl: H = +1, so Cl = −1\nNaClO: Na = +1, O = −2, so Cl = +1\nClO₃⁻: 3(−2) + Cl = −1, so Cl = +5\nClO₄⁻: 4(−2) + Cl = −1, so Cl = +7\nCl commonly ranges from −1 to +7.' },
+  { type:'mechanism', topic:'1.7', q:'Write half-equations for the reaction of MnO₄⁻ with Fe²⁺ in acidic solution.', a:'Reduction (MnO₄⁻ → Mn²⁺):\nMnO₄⁻ + 8H⁺ + 5e⁻ → Mn²⁺ + 4H₂O\n\nOxidation (Fe²⁺ → Fe³⁺):\nFe²⁺ → Fe³⁺ + e⁻\n\nOverall (×5 Fe half-equation):\nMnO₄⁻ + 8H⁺ + 5Fe²⁺ → Mn²⁺ + 4H₂O + 5Fe³⁺' },
+
+  // ---- 2.2 GROUP 2 ----
+  { type:'definition', topic:'2.2', q:'State the trend in hydroxide solubility down Group 2. Give an application.', a:'Solubility INCREASES down Group 2: Mg(OH)₂ sparingly soluble → Ca(OH)₂ slightly soluble → Ba(OH)₂ soluble.\nApplications: Mg(OH)₂ used as an antacid (reacts with stomach acid); Ca(OH)₂ used in agriculture to neutralise acidic soils.' },
+  { type:'definition', topic:'2.2', q:'State the trend in sulfate solubility down Group 2. Give an application.', a:'Solubility DECREASES down Group 2: MgSO₄ soluble → CaSO₄ slightly soluble → SrSO₄ insoluble → BaSO₄ insoluble.\nApplication: BaSO₄ used as "barium meal" X-ray contrast agent — insoluble so not absorbed by body (safe). BaCl₂ solution (acidified) used to test for SO₄²⁻ ions.' },
+  { type:'examtrap', topic:'2.2', q:'Why must the BaCl₂ solution be ACIDIFIED when testing for sulfate ions?', a:'To prevent false positives. In alkaline or neutral conditions, Ba²⁺ would react with other anions:\n• CO₃²⁻: BaCO₃ precipitate (white) — false positive\n• SO₃²⁻: BaSO₃ precipitate (white) — false positive\nAdding dilute HCl acidifies the solution and destroys CO₃²⁻ and SO₃²⁻ first, so only BaSO₄ would precipitate if SO₄²⁻ present.' },
+  { type:'examtrap', topic:'2.2', q:'Which Group 2 metal does NOT react with cold water?', a:'Magnesium (Mg) does not react with cold water. It reacts only with steam:\nMg + H₂O(steam) → MgO + H₂\n\nCa, Sr, and Ba all react with cold water (reactivity increases down the group):\nCa + 2H₂O → Ca(OH)₂ + H₂ (slow)\nSr/Ba: vigorous reaction.' },
+
+  // ---- 3.1 ORGANIC INTRO ----
+  { type:'definition', topic:'3.1', q:'Distinguish between structural isomers: chain, position, and functional group types.', a:'All have the same molecular formula but different structural formulas:\nChain isomers: different carbon skeleton (e.g. butane vs methylpropane)\nPosition isomers: same functional group at different position on the chain (e.g. propan-1-ol vs propan-2-ol)\nFunctional group isomers: different functional group (e.g. ethanol vs methoxymethane)' },
+  { type:'definition', topic:'3.1', q:'What conditions are required for E/Z isomerism?', a:'1. A C=C double bond (restricted rotation)\n2. Each carbon of the C=C must have TWO DIFFERENT substituents attached\nIf either carbon has two identical groups (e.g. =CH₂), E/Z isomerism is not possible.\nZ = Zusammen (together = same side), E = Entgegen (opposite side). Use CIP rules (higher atomic number = higher priority).' },
+
+  // ---- 3.2 ALKANES ----
+  { type:'mechanism', topic:'3.2', q:'Write all steps of the free-radical substitution of CH₄ with Cl₂ under UV light.', a:'INITIATION (UV required):\nCl₂ → 2Cl•\n\nPROPAGATION (chain continues — radical regenerated):\nCl• + CH₄ → HCl + CH₃•\nCH₃• + Cl₂ → CH₃Cl + Cl•\n\nTERMINATION (two radicals meet):\nCl• + Cl• → Cl₂\nCH₃• + Cl• → CH₃Cl\nCH₃• + CH₃• → C₂H₆' },
+  { type:'examtrap', topic:'3.2', q:'Why is free-radical substitution of alkanes a poor synthetic method?', a:'Multiple products form because the chain reaction can continue: CH₃Cl can react again to give CH₂Cl₂, then CHCl₃, then CCl₄. It is very difficult to control which product predominates — the reaction lacks selectivity. Also, termination steps produce by-products.' },
+  { type:'definition', topic:'3.2', q:'Distinguish between thermal cracking and catalytic cracking.', a:'Thermal cracking: very high temp (700–1200°C), high pressure, no catalyst. Produces high proportion of ALKENES (for polymer industry). Free radical mechanism (not required).\nCatalytic cracking: lower temp (~450°C), slight pressure, zeolite catalyst. Produces mainly MOTOR FUELS and aromatic hydrocarbons. More selective.' },
+
+  // ---- 3.3 HALOGENOALKANES ----
+  { type:'examtrap', topic:'3.3', q:'Rank C–F, C–Cl, C–Br, C–I bonds by hydrolysis rate and explain why.', a:'Fastest hydrolysis: C–I > C–Br > C–Cl > C–F slowest\n\nExplanation: The rate is determined by BOND ENTHALPY (ease of breaking the bond), not by bond polarity. C–F bond is very strong despite being very polar — it is hardest to break. C–I bond is weakest — easiest to break → fastest hydrolysis.\n\n⚠️ Common mistake: saying C–F reacts fastest because F is most electronegative. WRONG — it\'s bond enthalpy that matters.' },
+  { type:'mechanism', topic:'3.3', q:'Outline the nucleophilic substitution mechanism of 1-bromobutane with OH⁻(aq).', a:'1. The C–Br bond is polar (δ+C – δ–Br) due to Br\'s greater electronegativity.\n2. OH⁻ has a lone pair → acts as nucleophile, attacks the δ+ carbon.\n3. Curly arrow: from lone pair on OH⁻ → δ+C.\n4. Curly arrow: from C–Br bond → Br atom (Br⁻ leaves = leaving group).\n5. Product: butan-1-ol + Br⁻\n\nConditions: aqueous KOH/NaOH, warm.' },
+  { type:'examtrap', topic:'3.3', q:'How do you favour elimination over substitution in halogenoalkane reactions?', a:'Elimination: use CONCENTRATED KOH dissolved in ETHANOL, heat\nSubstitution: use AQUEOUS KOH (or NaOH), warm\n\nIn ethanol, KOH acts as a BASE and removes H⁺ from adjacent carbon while halide leaves. In water, OH⁻ prefers to act as a nucleophile and attack the carbon directly.' },
+  { type:'mechanism', topic:'3.3', q:'Write equations to show how Cl• atoms catalyse ozone depletion.', a:'Step 1: UV causes CFC to form Cl radical:\nCF₂Cl₂ → CF₂Cl• + Cl•\n\nStep 2: Cl• destroys O₃:\nCl• + O₃ → ClO• + O₂\n\nStep 3: ClO• destroys another O₃, regenerating Cl•:\nClO• + O₃ → 2O₂ + Cl•\n\nCl• is a catalyst — regenerated, not consumed. Each Cl• can destroy thousands of ozone molecules.' },
+
+  // ---- 3.4 ALKENES ----
+  { type:'definition', topic:'3.4', q:'What is an electrophile? Why is the C=C bond attacked by electrophiles?', a:'An electrophile is an electron-deficient species that accepts a lone pair/electron density to form a bond.\nThe C=C bond contains a π bond — a region of high electron density above and below the σ bond. This attracts electrophiles (positively charged or polarised species).' },
+  { type:'mechanism', topic:'3.4', q:'Outline the electrophilic addition mechanism of but-1-ene with HBr. State the major and minor products.', a:'Step 1: H (δ+) of HBr attacks the π bond → curly arrow from C=C to H. Br⁻ leaves.\nStep 2: Carbocation intermediate forms. For but-1-ene (CH₂=CHCH₂CH₃), H adds to C1 → forms secondary carbocation at C2 (major: more stable). H adds to C2 → primary carbocation at C1 (minor: less stable).\nStep 3: Br⁻ attacks the carbocation.\nMajor product: 2-bromobutane. Minor product: 1-bromobutane.\n\nMarkovnikov\'s rule: H adds to the carbon with more H atoms (gives more stable carbocation).' },
+  { type:'examtrap', topic:'3.4', q:'State the stability order of carbocations and explain why.', a:'3° > 2° > 1° > CH₃⁺ (most to least stable)\n\nAlkyl groups are electron-donating — they push electron density towards the positive carbon, reducing the charge concentration and stabilising the carbocation. More alkyl groups = more electron donation = more stable.\n\nThe more stable carbocation intermediate has a lower activation energy to form → forms preferentially → gives major product.' },
+  { type:'examtrap', topic:'3.4', q:'Why are addition polymers chemically unreactive?', a:'Addition polymers (polyalkenes) are unreactive because:\n1. They have only strong C–C and C–H sigma bonds in the backbone — no reactive functional groups.\n2. The C–C and C–H bonds are non-polar (or very weakly polar) — not susceptible to nucleophilic or electrophilic attack.\n3. No double bonds remain (all have been used in addition polymerisation).\nThis makes them useful (durable) but problematic for disposal (do not biodegrade).' },
+  { type:'definition', topic:'3.4', q:'How do you draw the repeating unit of an addition polymer from its monomer?', a:'Remove the double bond, add two bonds at each end of the new single bond, and place the whole unit in brackets with n subscript.\nExample: CH₂=CHCl → –[CH₂–CHCl]–n (poly(chloroethene)/PVC)\nReverse: to get monomer from polymer, add the double bond back between the two carbons and remove the side bonds.' },
+
+  // ---- 3.5 ALCOHOLS ----
+  { type:'definition', topic:'3.5', q:'Classify primary, secondary, and tertiary alcohols and state what each can be oxidised to.', a:'Primary (1°): OH on carbon with 2 H atoms attached. Oxidised to aldehyde (distil off) → further to carboxylic acid (reflux with excess K₂Cr₂O₇/H₂SO₄).\nSecondary (2°): OH on carbon with 1 H atom. Oxidised to ketone only (reflux).\nTertiary (3°): OH on carbon with no H atoms. NOT oxidised under normal conditions — no colour change with acidified dichromate.' },
+  { type:'examtrap', topic:'3.5', q:'How do you obtain an aldehyde (not carboxylic acid) from a primary alcohol?', a:'Use DISTILLATION method — add the alcohol to an excess of acidified K₂Cr₂O₇ solution and immediately distil off the aldehyde as it forms. The aldehyde has a lower boiling point than the alcohol and is removed before it can be further oxidised.\n\nIf you reflux, the aldehyde stays in contact with the oxidising agent and is further oxidised to the carboxylic acid.' },
+  { type:'examtrap', topic:'3.5', q:'How do you distinguish between an aldehyde and a ketone chemically?', a:'Tollens\' reagent (ammoniacal silver nitrate):\n• Aldehyde: silver mirror forms (Ag⁺ reduced to Ag by aldehyde)\n• Ketone: no change\n\nFehling\'s solution (alkaline Cu²⁺):\n• Aldehyde: brick-red precipitate (Cu₂O) forms\n• Ketone: no change (solution stays blue)\n\nBoth work because aldehydes CAN be oxidised (to carboxylic acids) but ketones CANNOT under mild conditions.' },
+  { type:'definition', topic:'3.5', q:'Compare fermentation and catalytic hydration for producing ethanol. Which is better for sustainability?', a:'Fermentation: glucose → ethanol + CO₂ (yeast, anaerobic, 25–35°C). Renewable feedstock (crops), but slow, batch process, low purity, uses land.\nCatalytic hydration: CH₂=CH₂ + H₂O → C₂H₅OH (H₃PO₄ cat, 300°C, 65 atm). Faster, continuous, high purity, but uses non-renewable crude oil.\nSustainability: fermentation uses renewable feedstock but is NOT truly carbon neutral (energy for distillation, fertilisers, land use change).' },
+  { type:'practical', topic:'3.5', q:'(RP5) Describe the preparation and purification of cyclohexene from cyclohexanol.', a:'1. Mix cyclohexanol with concentrated H₃PO₄ (catalyst) in round-bottom flask.\n2. Heat with anti-bumping granules under distillation setup. Collect distillate.\n3. Transfer to separating funnel. Add Na₂CO₃(aq) solution — wash to remove acid. Run off lower aqueous layer.\n4. Dry organic layer with anhydrous CaCl₂ (removes water).\n5. Filter off drying agent, then distil — collect fraction at cyclohexene\'s boiling point (83°C).\n6. Test product: add bromine water → decolourises (confirms C=C present).' },
+  { type:'astar', topic:'3.5', q:'(A*) Explain, at a molecular level, why tertiary alcohols cannot be oxidised by acidified dichromate.', a:'Oxidation of alcohols involves breaking the C–H bond on the carbon bearing the OH group. The oxidising agent removes these H atoms.\nIn tertiary alcohols, the carbon bearing the OH has NO hydrogen atoms attached (it is bonded to 3 other carbons and the OH). There is no C–H bond to break → oxidation cannot occur under normal conditions.\nTertiary alcohols can be burned (combustion) but not oxidised to carbonyl compounds.' },
+];
+
+let currentCards = [...allCards];
+let currentIndex = 0;
+let isFlipped = false;
+let scores = { correct: 0, incorrect: 0 };
+
+function initCards() {
+  currentCards = [...allCards];
+  currentIndex = 0;
+  isFlipped = false;
+  scores = { correct: 0, incorrect: 0 };
+  updateCard();
+  updateScoreDisplay();
+}
+
+function updateCard() {
+  if (currentCards.length === 0) {
+    document.getElementById('card-question').textContent = 'No cards in this category.';
+    document.getElementById('fc-progress').textContent = '0 cards';
+    return;
+  }
+  const card = currentCards[currentIndex];
+  document.getElementById('card-question').textContent = card.q;
+  document.getElementById('card-answer').innerHTML = card.a.replace(/\n/g, '<br>');
+  document.getElementById('fc-progress').textContent = `Card ${currentIndex + 1} of ${currentCards.length}`;
+  
+  const typeColors = {
+    definition: { bg:'rgba(79,195,247,0.1)', color:'#4fc3f7', border:'rgba(79,195,247,0.3)', label:'Definition' },
+    calculation: { bg:'rgba(0,229,160,0.1)', color:'#00e5a0', border:'rgba(0,229,160,0.3)', label:'Calculation' },
+    mechanism: { bg:'rgba(124,77,255,0.1)', color:'#7c4dff', border:'rgba(124,77,255,0.3)', label:'Mechanism' },
+    examtrap: { bg:'rgba(255,107,107,0.1)', color:'#ff6b6b', border:'rgba(255,107,107,0.3)', label:'⚠ Examiner Trap' },
+    practical: { bg:'rgba(255,167,2,0.1)', color:'#ffa502', border:'rgba(255,167,2,0.3)', label:'Required Practical' },
+    astar: { bg:'rgba(255,215,64,0.1)', color:'#ffd740', border:'rgba(255,215,64,0.3)', label:'★ A* Insight' }
+  };
+  const tc = typeColors[card.type] || typeColors.definition;
+  const tag = document.getElementById('card-type-display');
+  tag.textContent = tc.label;
+  tag.style.background = tc.bg;
+  tag.style.color = tc.color;
+  tag.style.border = `1px solid ${tc.border}`;
+
+  if (isFlipped) { flipCard(); }
+  updateScoreDisplay();
+}
+
+function flipCard() {
+  const fc = document.getElementById('flashcard');
+  isFlipped = !isFlipped;
+  fc.classList.toggle('flipped', isFlipped);
+}
+
+function nextCard() {
+  if (currentCards.length === 0) return;
+  currentIndex = (currentIndex + 1) % currentCards.length;
+  isFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  updateCard();
+}
+
+function markCard(correct) {
+  if (!isFlipped) { flipCard(); setTimeout(() => markCard(correct), 300); return; }
+  if (correct) scores.correct++;
+  else scores.incorrect++;
+  currentCards.splice(currentIndex, 1);
+  if (currentIndex >= currentCards.length) currentIndex = 0;
+  isFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  updateCard();
+  updateScoreDisplay();
+}
+
+function updateScoreDisplay() {
+  document.getElementById('score-correct').textContent = scores.correct;
+  document.getElementById('score-incorrect').textContent = scores.incorrect;
+  document.getElementById('score-remaining').textContent = currentCards.length;
+}
+
+function shuffleCards() {
+  for (let i = currentCards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [currentCards[i], currentCards[j]] = [currentCards[j], currentCards[i]];
+  }
+  currentIndex = 0;
+  isFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  updateCard();
+}
+
+function resetCards() {
+  filterCards('all', document.querySelector('.fc-filter-btn'));
+  scores = { correct: 0, incorrect: 0 };
+  updateScoreDisplay();
+}
+
+function filterCards(type, btn) {
+  document.querySelectorAll('.fc-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (type === 'all') {
+    currentCards = [...allCards];
+  } else {
+    currentCards = allCards.filter(c => c.type === type);
+  }
+  currentIndex = 0;
+  isFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  scores = { correct: 0, incorrect: 0 };
+  updateCard();
+  updateScoreDisplay();
+}
+
+// ========== SPEC CHECKER ==========
+const specPoints = [
+  { id:'1.1.1', section:'1.1', text:'Protons, neutrons, electrons: relative charge and relative mass', practical:false },
+  { id:'1.1.1b', section:'1.1', text:'An atom consists of a nucleus containing protons and neutrons surrounded by electrons', practical:false },
+  { id:'1.1.2a', section:'1.1', text:'Mass number (A) and atomic (proton) number (Z)', practical:false },
+  { id:'1.1.2b', section:'1.1', text:'Determine fundamental particles in atoms/ions using A, Z, and charge', practical:false },
+  { id:'1.1.2c', section:'1.1', text:'Explain the existence of isotopes', practical:false },
+  { id:'1.1.2d', section:'1.1', text:'Principles of TOF mass spectrometry (electrospray ionisation, acceleration, drift, detection)', practical:false },
+  { id:'1.1.2e', section:'1.1', text:'Interpret simple mass spectra of elements', practical:false },
+  { id:'1.1.2f', section:'1.1', text:'Calculate relative atomic mass from isotopic abundance', practical:false },
+  { id:'1.1.3a', section:'1.1', text:'Electron configurations of atoms and ions (Z ≤ 36) in shells and sub-shells (s, p, d)', practical:false },
+  { id:'1.1.3b', section:'1.1', text:'Define first ionisation energy', practical:false },
+  { id:'1.1.3c', section:'1.1', text:'Write equations for first and successive ionisation energies', practical:false },
+  { id:'1.1.3d', section:'1.1', text:'Explain 1st and successive IEs as evidence for electron configuration (Period 3, Group 2)', practical:false },
+  { id:'1.2.1a', section:'1.2', text:'Define relative atomic mass (Ar) and relative molecular mass (Mr) in terms of ¹²C', practical:false },
+  { id:'1.2.1b', section:'1.2', text:'Relative formula mass for ionic compounds', practical:false },
+  { id:'1.2.2a', section:'1.2', text:'Avogadro constant as number of particles in a mole', practical:false },
+  { id:'1.2.2b', section:'1.2', text:'Calculations using Avogadro constant, mass, Mr, and moles', practical:false },
+  { id:'1.2.2c', section:'1.2', text:'Concentration in mol dm⁻³ and calculations using c, V, and n', practical:false },
+  { id:'1.2.3a', section:'1.2', text:'Ideal gas equation pV = nRT with SI units', practical:false },
+  { id:'1.2.4a', section:'1.2', text:'Empirical formula: simplest whole number ratio', practical:false },
+  { id:'1.2.4b', section:'1.2', text:'Calculate empirical formula from composition by mass or %', practical:false },
+  { id:'1.2.4c', section:'1.2', text:'Calculate molecular formula from empirical formula and Mr', practical:false },
+  { id:'1.2.5a', section:'1.2', text:'Write balanced equations (full and ionic)', practical:false },
+  { id:'1.2.5b', section:'1.2', text:'Percentage atom economy calculations', practical:false },
+  { id:'1.2.5c', section:'1.2', text:'Use balanced equations: masses, volumes, % yield, % atom economy, concentrations', practical:false },
+  { id:'RP1', section:'1.2', text:'Required Practical 1: Volumetric solution and acid-base titration', practical:true },
+  { id:'1.3.1a', section:'1.3', text:'Ionic bonding: electrostatic attraction between ions in a lattice', practical:false },
+  { id:'1.3.1b', section:'1.3', text:'Formulas of compound ions (sulfate, hydroxide, nitrate, carbonate, ammonium)', practical:false },
+  { id:'1.3.1c', section:'1.3', text:'Predict charge on simple ions using Periodic Table position', practical:false },
+  { id:'1.3.2a', section:'1.3', text:'Covalent bond: shared pair of electrons; multiple bonds', practical:false },
+  { id:'1.3.2b', section:'1.3', text:'Dative (coordinate) covalent bond: both electrons from same atom', practical:false },
+  { id:'1.3.3a', section:'1.3', text:'Metallic bonding: delocalised electrons and positive ions in lattice', practical:false },
+  { id:'1.3.4a', section:'1.3', text:'Four types of crystal structure: ionic, metallic, macromolecular, molecular', practical:false },
+  { id:'1.3.4b', section:'1.3', text:'Structures of diamond, graphite, ice, iodine, magnesium, NaCl', practical:false },
+  { id:'1.3.4c', section:'1.3', text:'Relate melting point and conductivity to structure and bonding', practical:false },
+  { id:'1.3.5a', section:'1.3', text:'VSEPR: bonding/lone pairs repel; lone pair repulsion > bond pair repulsion', practical:false },
+  { id:'1.3.5b', section:'1.3', text:'Explain shapes and bond angles (up to 6 electron pairs)', practical:false },
+  { id:'1.3.6a', section:'1.3', text:'Electronegativity: power to attract bonding pair', practical:false },
+  { id:'1.3.6b', section:'1.3', text:'Polar covalent bonds and permanent dipoles; why some molecules with polar bonds have no net dipole', practical:false },
+  { id:'1.3.7a', section:'1.3', text:'Permanent dipole-dipole, van der Waals, and hydrogen bonding forces', practical:false },
+  { id:'1.3.7b', section:'1.3', text:'Importance of hydrogen bonding in low density of ice and anomalous boiling points', practical:false },
+  { id:'1.4.1a', section:'1.4', text:'Define standard enthalpy of combustion (ΔcH⊖)', practical:false },
+  { id:'1.4.1b', section:'1.4', text:'Define standard enthalpy of formation (ΔfH⊖)', practical:false },
+  { id:'1.4.2a', section:'1.4', text:'q = mcΔT; calculate molar enthalpy change from calorimetry', practical:false },
+  { id:'RP2', section:'1.4', text:'Required Practical 2: Measurement of an enthalpy change', practical:true },
+  { id:'1.4.3a', section:'1.4', text:'Hess\'s law: total ΔH independent of route', practical:false },
+  { id:'1.4.3b', section:'1.4', text:'Hess\'s law calculations using enthalpies of combustion or formation', practical:false },
+  { id:'1.4.4a', section:'1.4', text:'Define mean bond enthalpy', practical:false },
+  { id:'1.4.4b', section:'1.4', text:'Use mean bond enthalpies to calculate approximate ΔH (gas phase)', practical:false },
+  { id:'1.4.4c', section:'1.4', text:'Explain why bond enthalpy values differ from Hess\'s law values', practical:false },
+  { id:'1.5.1a', section:'1.5', text:'Reactions occur only when particles have sufficient energy (≥ activation energy)', practical:false },
+  { id:'1.5.1b', section:'1.5', text:'Define activation energy', practical:false },
+  { id:'1.5.2a', section:'1.5', text:'Maxwell-Boltzmann distribution of molecular energies', practical:false },
+  { id:'1.5.2b', section:'1.5', text:'Draw and interpret M-B distribution curves for different temperatures', practical:false },
+  { id:'1.5.3a', section:'1.5', text:'Qualitative effect of temperature on rate using M-B distribution', practical:false },
+  { id:'1.5.4a', section:'1.5', text:'Qualitative effect of concentration and pressure on collision frequency and rate', practical:false },
+  { id:'1.5.5a', section:'1.5', text:'Catalyst: increases rate without being consumed; provides lower Ea pathway', practical:false },
+  { id:'1.5.5b', section:'1.5', text:'Use M-B distribution to explain how catalyst increases rate', practical:false },
+  { id:'1.6.1a', section:'1.6', text:'Dynamic equilibrium: equal forward/reverse rates; constant concentrations', practical:false },
+  { id:'1.6.1b', section:'1.6', text:'Le Chatelier\'s principle applied to T, P, and concentration changes', practical:false },
+  { id:'1.6.1c', section:'1.6', text:'Catalyst does not affect position of equilibrium', practical:false },
+  { id:'1.6.1d', section:'1.6', text:'Explain compromise conditions in industrial processes', practical:false },
+  { id:'1.6.2a', section:'1.6', text:'Kc expression from equilibrium equation', practical:false },
+  { id:'1.6.2b', section:'1.6', text:'Calculate Kc from equilibrium concentrations', practical:false },
+  { id:'1.6.2c', section:'1.6', text:'Predict qualitative effects of temperature changes on Kc', practical:false },
+  { id:'1.7a', section:'1.7', text:'Oxidation (electron loss) and reduction (electron gain); oxidising/reducing agents', practical:false },
+  { id:'1.7b', section:'1.7', text:'Rules for assigning oxidation states', practical:false },
+  { id:'1.7c', section:'1.7', text:'Work out oxidation state from formula', practical:false },
+  { id:'1.7d', section:'1.7', text:'Write half-equations for oxidation and reduction', practical:false },
+  { id:'1.7e', section:'1.7', text:'Combine half-equations to give overall redox equation', practical:false },
+  { id:'2.1.1', section:'2.1', text:'Classification of elements as s, p, d, f block by proton number/position in Periodic Table', practical:false },
+  { id:'2.2a', section:'2.2', text:'Trends in atomic radius, 1st IE, and melting point (Mg–Ba)', practical:false },
+  { id:'2.2b', section:'2.2', text:'Reactions of Group 2 elements (Mg–Ba) with water', practical:false },
+  { id:'2.2c', section:'2.2', text:'Relative solubilities of Group 2 hydroxides (increases down group)', practical:false },
+  { id:'2.2d', section:'2.2', text:'Relative solubilities of Group 2 sulfates (decreases down group)', practical:false },
+  { id:'2.2e', section:'2.2', text:'Acidified BaCl₂ solution to test for sulfate ions; why it is acidified', practical:false },
+  { id:'2.2f', section:'2.2', text:'Applications: Mg(OH)₂ medicine, Ca(OH)₂ agriculture, BaSO₄ medicine, CaO/CaCO₃ for SO₂', practical:false },
+  { id:'3.1.1a', section:'3.1', text:'Organic compound representations: empirical, molecular, general, structural, displayed, skeletal', practical:false },
+  { id:'3.1.1b', section:'3.1', text:'IUPAC nomenclature and drawing structures (chains and rings up to 6C)', practical:false },
+  { id:'3.1.2a', section:'3.1', text:'Free-radical mechanisms (initiation, propagation, termination) — no curly arrows', practical:false },
+  { id:'3.1.2b', section:'3.1', text:'Curly arrow conventions for other mechanisms', practical:false },
+  { id:'3.1.3a', section:'3.1', text:'Structural isomerism: chain, position, functional group', practical:false },
+  { id:'3.1.3b', section:'3.1', text:'E/Z stereoisomerism: restricted rotation, CIP priority rules', practical:false },
+  { id:'3.2.1a', section:'3.2', text:'Alkanes are saturated hydrocarbons; petroleum as mixture separated by fractional distillation', practical:false },
+  { id:'3.2.2a', section:'3.2', text:'Thermal cracking: high T, high P, no catalyst → alkenes', practical:false },
+  { id:'3.2.2b', section:'3.2', text:'Catalytic cracking: zeolite catalyst → motor fuels and aromatics', practical:false },
+  { id:'3.2.3a', section:'3.2', text:'Complete and incomplete combustion of alkanes; pollutants (NOx, CO, C, hydrocarbons)', practical:false },
+  { id:'3.2.3b', section:'3.2', text:'Removal of SO₂ from flue gases using CaO or CaCO₃', practical:false },
+  { id:'3.2.4a', section:'3.2', text:'Free-radical substitution of methane with Cl₂: initiation, propagation, termination', practical:false },
+  { id:'3.3.1a', section:'3.3', text:'Halogenoalkanes contain polar C–X bonds; undergo nucleophilic substitution with OH⁻, CN⁻, NH₃', practical:false },
+  { id:'3.3.1b', section:'3.3', text:'C–X bond enthalpy influences rate of hydrolysis (NOT polarity)', practical:false },
+  { id:'3.3.2a', section:'3.3', text:'Elimination with KOH/ethanol: role as base; mechanism outline', practical:false },
+  { id:'3.3.3a', section:'3.3', text:'CFCs, Cl• formation by UV, Cl• catalyse ozone decomposition (equations)', practical:false },
+  { id:'3.4.1a', section:'3.4', text:'Alkenes are unsaturated; C=C double bond is a centre of high electron density', practical:false },
+  { id:'3.4.2a', section:'3.4', text:'Electrophilic addition with HBr, H₂SO₄, Br₂; bromine as test for unsaturation', practical:false },
+  { id:'3.4.2b', section:'3.4', text:'Major/minor products from Markovnikov addition; carbocation stability (3°>2°>1°)', practical:false },
+  { id:'3.4.3a', section:'3.4', text:'Addition polymers from alkenes; repeating unit; IUPAC naming', practical:false },
+  { id:'3.4.3b', section:'3.4', text:'Why addition polymers are unreactive; intermolecular forces in polyalkenes', practical:false },
+  { id:'3.5.1a', section:'3.5', text:'Industrial production of ethanol by catalytic hydration of ethene', practical:false },
+  { id:'3.5.1b', section:'3.5', text:'Ethanol by fermentation of glucose: conditions, separation, biofuel evaluation', practical:false },
+  { id:'3.5.2a', section:'3.5', text:'Classification of alcohols (1°, 2°, 3°); oxidation products', practical:false },
+  { id:'3.5.2b', section:'3.5', text:'Use K₂Cr₂O₇/H₂SO₄ as oxidising agent; Fehling\'s and Tollens\' tests', practical:false },
+  { id:'3.5.3a', section:'3.5', text:'Acid-catalysed elimination of alcohols → alkenes', practical:false },
+  { id:'RP5', section:'3.5', text:'Required Practical 5: Distillation of a product from a reaction', practical:true },
+];
+
+let specState = {};
+
+function buildSpecTable() {
+  const sections = [...new Set(specPoints.map(p => p.section))];
+  let html = '';
+  sections.forEach(sec => {
+    const points = specPoints.filter(p => p.section === sec);
+    html += `<div style="margin-bottom:24px">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--accent);margin-bottom:8px;padding:8px 0;border-bottom:1px solid var(--border)">Section ${sec}</div>
+      <table class="spec-table" style="width:100%">
+        <tr>
+          <th style="width:50%">Specification Point</th>
+          <th style="width:15%">Ref</th>
+          <th style="width:15%">Done?</th>
+          <th style="width:20%">Confidence</th>
+        </tr>`;
+    points.forEach(p => {
+      const isChecked = specState[p.id]?.checked || false;
+      const conf = specState[p.id]?.conf || 0;
+      html += `<tr>
+        <td>${p.practical ? `<span class="rp-badge">RP</span> ` : ''}${p.text}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)">${p.id}</td>
+        <td><span class="spec-check ${isChecked ? 'checked' : ''}" onclick="toggleSpec('${p.id}', this)">${isChecked ? '✓' : ''}</span></td>
+        <td>
+          <div class="confidence-dots">
+            <div class="conf-dot red ${conf === 1 ? 'active' : ''}" onclick="setConf('${p.id}', 1, this.parentNode)" title="Low"></div>
+            <div class="conf-dot yellow ${conf === 2 ? 'active' : ''}" onclick="setConf('${p.id}', 2, this.parentNode)" title="Medium"></div>
+            <div class="conf-dot green ${conf === 3 ? 'active' : ''}" onclick="setConf('${p.id}', 3, this.parentNode)" title="High"></div>
+          </div>
+        </td>
+      </tr>`;
+    });
+    html += `</table></div>`;
+  });
+  document.getElementById('spec-table-container').innerHTML = html;
+}
+
+function toggleSpec(id, el) {
+  if (!specState[id]) specState[id] = {};
+  specState[id].checked = !specState[id].checked;
+  el.classList.toggle('checked', specState[id].checked);
+  el.textContent = specState[id].checked ? '✓' : '';
+}
+
+function setConf(id, level, container) {
+  if (!specState[id]) specState[id] = {};
+  specState[id].conf = level;
+  container.querySelectorAll('.conf-dot').forEach((dot, i) => {
+    dot.classList.remove('active');
+    if (i + 1 === level) dot.classList.add('active');
+  });
+}
+
+// ========== TAB NAVIGATION ==========
+function showTab(tab) {
+  document.getElementById('overview-mode').style.display = 'none';
+  document.getElementById('notes-mode').style.display = 'none';
+  document.getElementById('flashcard-mode').style.display = 'none';
+  document.getElementById('spec-mode').style.display = 'none';
+
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+
+  if (tab === 'overview') {
+    document.getElementById('overview-mode').style.display = 'block';
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+  } else if (tab === 'notes') {
+    document.getElementById('notes-mode').style.display = 'block';
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+  } else if (tab === 'flashcards') {
+    document.getElementById('flashcard-mode').style.display = 'block';
+    document.querySelectorAll('.tab-btn')[2].classList.add('active');
+    initCards();
+  } else if (tab === 'spec') {
+    document.getElementById('spec-mode').style.display = 'block';
+    document.querySelectorAll('.tab-btn')[3].classList.add('active');
+    buildSpecTable();
+  }
+}
+
+function navigateTo(sectionId) {
+  showTab('notes');
+  setTimeout(() => {
+    const el = document.getElementById(sectionId);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// ========== ACCORDION ==========
+function toggleBlock(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.toggle-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+// ========== SEARCH ==========
+function handleSearch(query) {
+  query = query.toLowerCase().trim();
+  if (!query) return;
+  showTab('notes');
+}
+
+// ========== SIDEBAR TOGGLE ==========
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', () => {
+  initCards();
+  // Close all accordions except first per section — already handled by .open class
+});
+</script>
+</body>
+</html>
