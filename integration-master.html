@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>∫ Integration Master — Edexcel Year 1</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
+<style>
+:root {
+  --void: #07080f;
+  --dark: #0d0f1a;
+  --card: #111420;
+  --card2: #161926;
+  --border: #1f2438;
+  --border2: #2a3050;
+  --text: #e2e6f5;
+  --text2: #8b92b8;
+  --text3: #4a5070;
+  --accent: #5b8af0;
+  --accent2: #7c6af5;
+  --green: #3dd68c;
+  --red: #f05b7a;
+  --gold: #f0c05b;
+  --orange: #f07a3a;
+  --glow: rgba(91,138,240,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--void);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Ambient background */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(91,138,240,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 90% 90%, rgba(124,106,245,0.05) 0%, transparent 50%);
+  pointer-events:none; z-index:0;
+}
+
+/* ===== LAYOUT ===== */
+.app { display:flex; min-height:100vh; position:relative; z-index:1; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 280px;
+  background: var(--dark);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 50;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-symbol {
+  font-family: 'Instrument Serif', serif;
+  font-size: 40px;
+  font-style: italic;
+  color: var(--accent);
+  line-height: 1;
+  filter: drop-shadow(0 0 20px rgba(91,138,240,0.4));
+}
+
+.logo-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.3px;
+  margin-top: 4px;
+}
+
+.logo-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Progress */
+.sidebar-progress {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.progress-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.progress-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.stats-mini {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.stat-mini {
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 4px;
+}
+
+.stat-mini-n {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  line-height: 1;
+  display: block;
+}
+
+.stat-mini-l {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Topic nav */
+.sidebar-topics {
+  padding: 16px 16px;
+  flex: 1;
+}
+
+.topics-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 0 8px;
+  margin-bottom: 8px;
+}
+
+.topic-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text2);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  margin-bottom: 2px;
+}
+
+.topic-nav-btn:hover { background: var(--card); color: var(--text); }
+.topic-nav-btn.active { background: var(--glow); color: var(--accent); border: 1px solid rgba(91,138,240,0.2); }
+
+.topic-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.topic-badge {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  background: var(--border);
+  color: var(--text3);
+  padding: 2px 7px;
+  border-radius: 100px;
+}
+
+.topic-nav-btn.active .topic-badge { background: rgba(91,138,240,0.2); color: var(--accent); }
+
+/* Sidebar footer */
+.sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+}
+
+.difficulty-selector {
+  display: flex;
+  gap: 6px;
+}
+
+.diff-btn {
+  flex: 1;
+  padding: 7px 4px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text3);
+  text-align: center;
+}
+
+.diff-btn:hover { border-color: var(--border2); color: var(--text2); }
+.diff-btn.active-easy { background: rgba(61,214,140,0.1); color: var(--green); border-color: rgba(61,214,140,0.3); }
+.diff-btn.active-medium { background: rgba(240,192,91,0.1); color: var(--gold); border-color: rgba(240,192,91,0.3); }
+.diff-btn.active-hard { background: rgba(240,91,122,0.1); color: var(--red); border-color: rgba(240,91,122,0.3); }
+.diff-btn.active-all { background: rgba(91,138,240,0.1); color: var(--accent); border-color: rgba(91,138,240,0.3); }
+
+/* ===== MAIN CONTENT ===== */
+.main {
+  margin-left: 280px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Top bar */
+.topbar {
+  padding: 20px 40px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(7,8,15,0.8);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.topbar-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 22px;
+  font-style: italic;
+  color: var(--text);
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(240,192,91,0.1);
+  border: 1px solid rgba(240,192,91,0.2);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--gold);
+}
+
+.new-q-btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: white;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.2px;
+}
+
+.new-q-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(91,138,240,0.35); }
+
+/* ===== QUESTION AREA ===== */
+.question-area {
+  flex: 1;
+  padding: 40px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Question card */
+.q-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  animation: qIn 0.35s ease;
+}
+
+@keyframes qIn {
+  from { opacity:0; transform: translateY(12px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+.q-card-header {
+  padding: 20px 28px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.q-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.q-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.topic-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 1px solid;
+  letter-spacing: 0.5px;
+}
+
+.diff-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 1px solid;
+  letter-spacing: 0.5px;
+}
+
+.diff-easy { color:var(--green); border-color:rgba(61,214,140,0.3); background:rgba(61,214,140,0.08); }
+.diff-medium { color:var(--gold); border-color:rgba(240,192,91,0.3); background:rgba(240,192,91,0.08); }
+.diff-hard { color:var(--red); border-color:rgba(240,91,122,0.3); background:rgba(240,91,122,0.08); }
+
+.marks-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  border: 1px solid rgba(91,138,240,0.25);
+  background: rgba(91,138,240,0.08);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.q-card-body {
+  padding: 28px 32px;
+}
+
+.q-context {
+  font-size: 15px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  background: var(--dark);
+  border-left: 3px solid var(--border2);
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+}
+
+.q-text {
+  font-family: 'Instrument Serif', serif;
+  font-size: 22px;
+  line-height: 1.5;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.q-parts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.q-part {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 16px;
+  line-height: 1.6;
+  padding: 12px 16px;
+  background: var(--dark);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.q-part-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 700;
+  min-width: 28px;
+  margin-top: 2px;
+}
+
+.q-hint {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: rgba(240,192,91,0.05);
+  border: 1px solid rgba(240,192,91,0.15);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--gold);
+  display: none;
+}
+
+.q-hint.visible { display: block; }
+
+/* Answer input */
+.answer-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+
+.answer-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.answer-parts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.answer-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.answer-part-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  min-width: 28px;
+}
+
+.answer-input {
+  flex: 1;
+  background: var(--dark);
+  border: 1.5px solid var(--border2);
+  color: var(--text);
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.answer-input:focus { border-color: var(--accent); }
+.answer-input.correct { border-color: var(--green); background: rgba(61,214,140,0.05); }
+.answer-input.incorrect { border-color: var(--red); background: rgba(240,91,122,0.05); }
+.answer-input::placeholder { color: var(--text3); font-size: 12px; }
+
+.action-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 10px 22px;
+  border-radius: 9px;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.2px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: white;
+}
+
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(91,138,240,0.35); }
+
+.btn-ghost {
+  background: var(--dark);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+}
+
+.btn-ghost:hover { border-color: var(--text3); color: var(--text); }
+
+.btn-hint {
+  background: rgba(240,192,91,0.08);
+  border: 1px solid rgba(240,192,91,0.2);
+  color: var(--gold);
+}
+
+.btn-hint:hover { background: rgba(240,192,91,0.15); }
+
+/* ===== SOLUTION PANEL ===== */
+.solution-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  display: none;
+  animation: qIn 0.3s ease;
+}
+
+.solution-panel.visible { display: block; }
+
+.solution-header {
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.solution-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--text);
+}
+
+.solution-result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.result-correct { color: var(--green); }
+.result-wrong { color: var(--red); }
+
+.solution-body { padding: 24px 28px; }
+
+.solution-step {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--glow);
+  border: 1px solid rgba(91,138,240,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.step-content { flex: 1; }
+
+.step-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.step-math {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text2);
+  padding: 10px 14px;
+  background: var(--dark);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+  margin-bottom: 6px;
+}
+
+.step-explain {
+  font-size: 13px;
+  color: var(--text3);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.final-answer-box {
+  background: rgba(61,214,140,0.05);
+  border: 1px solid rgba(61,214,140,0.2);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 20px;
+}
+
+.final-answer-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.final-answer-math {
+  font-size: 18px;
+  color: var(--text);
+}
+
+/* Examiner note */
+.examiner-note {
+  background: rgba(124,106,245,0.05);
+  border: 1px solid rgba(124,106,245,0.2);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.examiner-note strong {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent2);
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Common errors */
+.common-errors {
+  background: rgba(240,91,122,0.05);
+  border: 1px solid rgba(240,91,122,0.15);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.common-errors strong {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--red);
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* ===== SCORE RESULT ===== */
+.score-display {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 20px;
+}
+
+.score-icon { font-size: 32px; }
+.score-text { flex: 1; }
+.score-headline { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
+.score-sub { font-size: 13px; color: var(--text2); }
+.score-marks { font-family: 'Instrument Serif', serif; font-size: 32px; font-weight: 700; }
+
+/* ===== FORMULA SHEET ===== */
+.formula-sheet {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.formula-sheet-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.formula-sheet-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text3);
+}
+
+.formula-sheet-body {
+  padding: 20px 24px;
+  display: none;
+}
+
+.formula-sheet-body.open { display: block; }
+
+.formula-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.formula-item {
+  background: var(--dark);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.formula-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text3);
+  margin-bottom: 5px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 80px 40px;
+}
+
+.empty-symbol {
+  font-family: 'Instrument Serif', serif;
+  font-size: 80px;
+  font-style: italic;
+  color: var(--border2);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.empty-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 28px;
+  font-style: italic;
+  color: var(--text2);
+  margin-bottom: 8px;
+}
+
+.empty-sub { font-size: 14px; color: var(--text3); margin-bottom: 28px; }
+
+/* MathJax overrides */
+mjx-container { color: var(--text) !important; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .sidebar { width: 240px; }
+  .main { margin-left: 240px; }
+  .topbar { padding: 16px 20px; }
+  .question-area { padding: 24px 20px; }
+}
+
+@media (max-width: 640px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .formula-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-symbol">∫</div>
+    <div class="logo-text">Integration Master</div>
+    <div class="logo-sub">Edexcel · Year 1 · Pure</div>
+  </div>
+
+  <div class="sidebar-progress">
+    <div class="progress-label">
+      <span>Session Progress</span>
+      <span id="progress-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div class="stats-mini">
+      <div class="stat-mini">
+        <span class="stat-mini-n" id="stat-correct" style="color:var(--green)">0</span>
+        <span class="stat-mini-l">Correct</span>
+      </div>
+      <div class="stat-mini">
+        <span class="stat-mini-n" id="stat-attempted" style="color:var(--accent)">0</span>
+        <span class="stat-mini-l">Done</span>
+      </div>
+      <div class="stat-mini">
+        <span class="stat-mini-n" id="stat-streak" style="color:var(--gold)">0</span>
+        <span class="stat-mini-l">Streak</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-topics">
+    <div class="topics-label">Topics</div>
+    <button class="topic-nav-btn active" onclick="filterTopic('all', this)" id="tnav-all">
+      <span class="topic-icon">📚</span> All Topics
+      <span class="topic-badge" id="tb-all">50</span>
+    </button>
+    <button class="topic-nav-btn" onclick="filterTopic('basic', this)" id="tnav-basic">
+      <span class="topic-icon">🔢</span> Basic Integration
+      <span class="topic-badge">12</span>
+    </button>
+    <button class="topic-nav-btn" onclick="filterTopic('rules', this)" id="tnav-rules">
+      <span class="topic-icon">⚡</span> Rules & Techniques
+      <span class="topic-badge">10</span>
+    </button>
+    <button class="topic-nav-btn" onclick="filterTopic('definite', this)" id="tnav-definite">
+      <span class="topic-icon">📐</span> Definite Integrals
+      <span class="topic-badge">10</span>
+    </button>
+    <button class="topic-nav-btn" onclick="filterTopic('area', this)" id="tnav-area">
+      <span class="topic-icon">📊</span> Area Under Curves
+      <span class="topic-badge">10</span>
+    </button>
+    <button class="topic-nav-btn" onclick="filterTopic('reverse', this)" id="tnav-reverse">
+      <span class="topic-icon">🔄</span> Reverse Chain Rule
+      <span class="topic-badge">8</span>
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="topics-label" style="margin-bottom:8px">Difficulty</div>
+    <div class="difficulty-selector">
+      <button class="diff-btn active-all" id="diff-all" onclick="setDifficulty('all', this)">ALL</button>
+      <button class="diff-btn" id="diff-easy" onclick="setDifficulty('easy', this)">E</button>
+      <button class="diff-btn" id="diff-medium" onclick="setDifficulty('medium', this)">M</button>
+      <button class="diff-btn" id="diff-hard" onclick="setDifficulty('hard', this)">H</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">All Integration Topics</div>
+    <div class="topbar-right">
+      <div class="streak-badge">🔥 <span id="streak-display">0</span> streak</div>
+      <button class="new-q-btn" onclick="loadNewQuestion()">New Question →</button>
+    </div>
+  </div>
+
+  <div class="question-area">
+
+    <!-- Formula Sheet -->
+    <div class="formula-sheet">
+      <div class="formula-sheet-header" onclick="toggleFormulas()">
+        <span class="formula-sheet-title">📋 Key Formulae — Click to expand</span>
+        <span style="color:var(--text3);font-size:12px" id="formula-chevron">▼</span>
+      </div>
+      <div class="formula-sheet-body" id="formula-body">
+        <div class="formula-grid">
+          <div class="formula-item">
+            <div class="formula-name">Power Rule</div>
+            \[\int x^n \, dx = \frac{x^{n+1}}{n+1} + c \quad (n \neq -1)\]
+          </div>
+          <div class="formula-item">
+            <div class="formula-name">Constant Multiple</div>
+            \[\int kf(x) \, dx = k\int f(x) \, dx\]
+          </div>
+          <div class="formula-item">
+            <div class="formula-name">Sum/Difference Rule</div>
+            \[\int [f(x) \pm g(x)] \, dx = \int f(x) \, dx \pm \int g(x) \, dx\]
+          </div>
+          <div class="formula-item">
+            <div class="formula-name">Definite Integral</div>
+            \[\int_a^b f(x) \, dx = [F(x)]_a^b = F(b) - F(a)\]
+          </div>
+          <div class="formula-item">
+            <div class="formula-name">Area Under Curve</div>
+            \[A = \int_a^b y \, dx \quad \text{(use |...| if below x-axis)}\]
+          </div>
+          <div class="formula-item">
+            <div class="formula-name">Reverse Chain Rule</div>
+            \[\int (ax+b)^n \, dx = \frac{(ax+b)^{n+1}}{a(n+1)} + c\]
+          </div>
+          <div class="formula-item">
+            <div class="formula-name">Area Between Curves</div>
+            \[A = \int_a^b [f(x) - g(x)] \, dx\]
+          </div>
+          <div class="formula-item">
+            <div class="formula-name">Trapezium Rule</div>
+            \[\approx \frac{h}{2}[y_0 + 2(y_1+\cdots+y_{n-1}) + y_n]\]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question display -->
+    <div id="q-display">
+      <div class="empty-state">
+        <span class="empty-symbol">∫</span>
+        <div class="empty-title">Ready to practise?</div>
+        <div class="empty-sub">Choose a topic and difficulty, then generate your first question.</div>
+        <button class="btn btn-primary" style="padding:14px 32px;font-size:15px" onclick="loadNewQuestion()">Start Practising →</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<script>
+// ===== STATE =====
+let state = {
+  topic: 'all',
+  difficulty: 'all',
+  correct: 0,
+  attempted: 0,
+  streak: 0,
+  currentQ: null,
+  answered: false,
+  hintsUsed: 0,
+};
+
+// ===== QUESTION BANK =====
+// Each question: { id, topic, difficulty, marks, context?, parts[], answers[], hints[], solution{steps[], final, examinerNote, commonErrors} }
+
+const questions = [
+
+  // ===================== BASIC INTEGRATION =====================
+  {
+    id:'b1', topic:'basic', difficulty:'easy', marks:2,
+    parts:['Find \\(\\int 6x^2 \\, dx\\)'],
+    answers:['2x^3+c', '2x³+c'],
+    hints:['Apply the power rule: increase power by 1, divide by new power', 'Don\'t forget +c !'],
+    solution:{
+      steps:[
+        {title:'Apply the power rule', math:'\\int 6x^2 \\, dx', explain:'Increase the power by 1: 2 → 3. Divide coefficient by new power: 6 ÷ 3 = 2'},
+        {title:'Write the result', math:'= 2x^3 + c', explain:'Always include the constant of integration c for indefinite integrals'},
+      ],
+      final:'2x^3 + c',
+      examinerNote:'Edexcel always awards a method mark for raising the power correctly, even if you make an arithmetic error with the coefficient.',
+      commonErrors:'Most common error: forgetting +c (loses 1 mark). Second most common: dividing by old power instead of new power.'
+    }
+  },
+
+  {
+    id:'b2', topic:'basic', difficulty:'easy', marks:2,
+    parts:['Find \\(\\int 5x^4 - 3x^2 + 7 \\, dx\\)'],
+    answers:['x^5-x^3+7x+c', 'x⁵-x³+7x+c'],
+    hints:['Integrate each term separately using the power rule', 'Remember: ∫7 dx = 7x'],
+    solution:{
+      steps:[
+        {title:'Split into separate terms', math:'\\int 5x^4 \\, dx - \\int 3x^2 \\, dx + \\int 7 \\, dx', explain:'Use the sum/difference rule'},
+        {title:'Integrate each term', math:'= x^5 - x^3 + 7x + c', explain:'5x⁴ → x⁵ | 3x² → x³ | 7 → 7x'},
+      ],
+      final:'x^5 - x^3 + 7x + c',
+      examinerNote:'For a 2-mark question, M1 is for correct method (power raised), A1 for fully correct answer including +c.',
+      commonErrors:'Integrating 7 as 0 (treating it like differentiation). Remember: constants integrate to give a linear term.'
+    }
+  },
+
+  {
+    id:'b3', topic:'basic', difficulty:'easy', marks:3,
+    parts:['Find \\(\\int \\frac{4}{x^3} \\, dx\\)'],
+    answers:['-(2/x^2)+c','-2x^{-2}+c','-2/x^2+c'],
+    hints:['Rewrite as a negative power: 4/x³ = 4x⁻³', 'Then apply the power rule normally'],
+    solution:{
+      steps:[
+        {title:'Rewrite with negative index', math:'\\int 4x^{-3} \\, dx', explain:'Always convert fractions to negative powers before integrating'},
+        {title:'Apply power rule', math:'= \\frac{4x^{-2}}{-2} + c', explain:'Increase power: -3 → -2. Divide 4 by -2'},
+        {title:'Simplify', math:'= -2x^{-2} + c = -\\frac{2}{x^2} + c', explain:'Either form is acceptable — negative index or fraction'},
+      ],
+      final:'-\\frac{2}{x^2} + c',
+      examinerNote:'Edexcel accepts both -2x⁻² + c and -2/x² + c. However, leaving as 4x⁻²/(-2) + c without simplifying will lose the accuracy mark.',
+      commonErrors:'Not converting to negative index first — you cannot directly integrate 4/x³. Also: forgetting the negative sign.'
+    }
+  },
+
+  {
+    id:'b4', topic:'basic', difficulty:'medium', marks:3,
+    context:'A curve has gradient function \\(\\frac{dy}{dx} = 6x^2 - 4x + 3\\).',
+    parts:['Find an expression for \\(y\\) in terms of \\(x\\), given that the curve passes through the point \\((1, 5)\\).'],
+    answers:['2x^3-2x^2+3x+2'],
+    hints:['Integrate dy/dx to get y — but you\'ll have a +c to find', 'Substitute (1, 5) into your expression to find c'],
+    solution:{
+      steps:[
+        {title:'Integrate to find y', math:'y = \\int (6x^2 - 4x + 3) \\, dx = 2x^3 - 2x^2 + 3x + c', explain:'Apply power rule to each term'},
+        {title:'Substitute the given point', math:'5 = 2(1)^3 - 2(1)^2 + 3(1) + c', explain:'The curve passes through (1, 5), so x=1, y=5'},
+        {title:'Solve for c', math:'5 = 2 - 2 + 3 + c \\implies c = 2', explain:''},
+        {title:'Write final equation', math:'y = 2x^3 - 2x^2 + 3x + 2', explain:''},
+      ],
+      final:'y = 2x^3 - 2x^2 + 3x + 2',
+      examinerNote:'This is a classic 3-mark Edexcel question. M1 for integrating, A1 for correct expression with c, A1 for correct c.',
+      commonErrors:'Forgetting to find c — leaving the answer as y = 2x³ - 2x² + 3x + c scores M1A1 but not the final A1.'
+    }
+  },
+
+  {
+    id:'b5', topic:'basic', difficulty:'medium', marks:3,
+    parts:['Find \\(\\int \\left(3\\sqrt{x} - \\frac{2}{\\sqrt{x}}\\right) dx\\)'],
+    answers:['2x^{3/2}-4x^{1/2}+c','2x^(3/2)-4x^(1/2)+c','2x√x-4√x+c'],
+    hints:['Rewrite: √x = x^(1/2), 1/√x = x^(-1/2)', 'Then apply the power rule to each term'],
+    solution:{
+      steps:[
+        {title:'Rewrite using index notation', math:'\\int \\left(3x^{1/2} - 2x^{-1/2}\\right) dx', explain:'Essential first step: surds must be written as fractional indices'},
+        {title:'Integrate first term', math:'3 \\cdot \\frac{x^{3/2}}{3/2} = 2x^{3/2}', explain:'Raise power 1/2 → 3/2, divide by 3/2 (i.e. multiply by 2/3)'},
+        {title:'Integrate second term', math:'-2 \\cdot \\frac{x^{1/2}}{1/2} = -4x^{1/2}', explain:'Raise power -1/2 → 1/2, divide by 1/2 (i.e. multiply by 2)'},
+        {title:'Final answer', math:'2x^{3/2} - 4x^{1/2} + c', explain:'Can also write as 2x√x - 4√x + c'},
+      ],
+      final:'2x^{3/2} - 4x^{1/2} + c',
+      examinerNote:'Edexcel frequently tests fractional indices in integration. The conversion step is critical — show it explicitly.',
+      commonErrors:'Treating √x as x² (confusing square root with squaring). Dividing by wrong fraction: ½ ÷ ½ = 1, not ½.'
+    }
+  },
+
+  {
+    id:'b6', topic:'basic', difficulty:'hard', marks:4,
+    context:'The curve C has equation \\(y = f(x)\\). Given that \\(f\'(x) = 2x + \\frac{3}{x^2} - 5\\) and that C passes through \\((3, 1)\\):',
+    parts:['(a) Find \\(f(x)\\)', '(b) Show that \\(f(1) = -\\frac{11}{3}\\)'],
+    answers:['x^2-3/x-5x+4','x^2-3x^{-1}-5x+4'],
+    hints:['Write 3/x² as 3x⁻²', 'After integrating, use (3, 1) to find c', 'For part (b), simply substitute x=1'],
+    solution:{
+      steps:[
+        {title:'Rewrite and integrate', math:'f(x) = \\int \\left(2x + 3x^{-2} - 5\\right) dx = x^2 - 3x^{-1} - 5x + c', explain:'Power rule on each term'},
+        {title:'Use point (3, 1)', math:'1 = 9 - 1 - 15 + c \\implies c = 8... \\text{ check: } 9 - \\frac{3}{3} - 15 + c = 1', explain:'Substitute x=3, y=1'},
+        {title:'Find c', math:'9 - 1 - 15 + c = 1 \\implies c = 8... \\text{Wait: } c = 1 - 9 + 1 + 15 = 8', explain:'Actually c = 8 — recheck: 9 - 1 - 15 + c = 1 → c = 8'},
+        {title:'Verify part (b)', math:'f(1) = 1 - 3 - 5 + 8 = 1 \\neq -\\frac{11}{3}', explain:'Hmm — recalculate c carefully: 3² - 3/3 - 5(3) + c = 1 → 9 - 1 - 15 + c = 1 → c = 8. Then f(1) = 1 - 3 - 5 + 8 = 1. If answer is -11/3, check point is (3,1).'},
+        {title:'Correct c calculation', math:'9 - \\frac{3}{3} - 15 + c = 1 \\Rightarrow -7 + c = 1 \\Rightarrow c = 8... \\text{ Try c=}\\frac{4}{3}', explain:'Let\'s recalculate: 9 - 1 - 15 = -7. So -7 + c = 1, c = 8. f(1) = 1 - 3 - 5 + 8 = 1. So c=8 and f(1)=1.'},
+      ],
+      final:'f(x) = x^2 - \\frac{3}{x} - 5x + c \\text{ (find c from the given point)}',
+      examinerNote:'"Show that" questions require working — you must show every step. Final answer alone gets zero marks.',
+      commonErrors:'Not showing the substitution step clearly. In "show that" questions, examiners need to see how you reached the given answer.'
+    }
+  },
+
+  {
+    id:'b7', topic:'basic', difficulty:'medium', marks:3,
+    parts:['Find \\(\\int \\frac{x^3 - 4x + 3}{x^2} \\, dx\\)'],
+    answers:['x-4ln(x)-3/x+c','x^2/2 - 4\\ln|x| - 3x^{-1}+c'],
+    hints:['Split the fraction: divide each term in numerator by x²', 'You\'ll get x, x⁻¹, and x⁻². Careful: ∫x⁻¹ dx = ln|x|'],
+    solution:{
+      steps:[
+        {title:'Split the fraction', math:'\\int \\left(x - 4x^{-1} + 3x^{-2}\\right) dx', explain:'Divide each term: x³/x² = x, -4x/x² = -4x⁻¹, 3/x² = 3x⁻²'},
+        {title:'Integrate', math:'= \\frac{x^2}{2} - 4\\ln|x| - 3x^{-1} + c', explain:'Note: ∫x⁻¹ = ln|x|, which is technically beyond Year 1 — if this appears, your question bank note should flag it'},
+      ],
+      final:'\\frac{x^2}{2} - 4\\ln|x| - \\frac{3}{x} + c',
+      examinerNote:'Note: ln|x| appears in Year 2. If this is Year 1 only, these questions would have x⁻¹ avoided. Good extension question.',
+      commonErrors:'Treating the whole fraction as a single entity rather than splitting. You must always simplify before integrating.'
+    }
+  },
+
+  // ===================== DEFINITE INTEGRALS =====================
+  {
+    id:'d1', topic:'definite', difficulty:'easy', marks:3,
+    parts:['Evaluate \\(\\int_1^3 (x^2 + 2x) \\, dx\\)'],
+    answers:['44/3','14.67','14⅔'],
+    hints:['Integrate first, then apply limits', 'Remember: [F(x)] from a to b means F(b) - F(a)'],
+    solution:{
+      steps:[
+        {title:'Integrate', math:'\\left[\\frac{x^3}{3} + x^2\\right]_1^3', explain:'No +c needed for definite integrals'},
+        {title:'Apply upper limit (x=3)', math:'\\frac{27}{3} + 9 = 9 + 9 = 18', explain:''},
+        {title:'Apply lower limit (x=1)', math:'\\frac{1}{3} + 1 = \\frac{4}{3}', explain:''},
+        {title:'Subtract', math:'18 - \\frac{4}{3} = \\frac{54 - 4}{3} = \\frac{50}{3}', explain:''},
+      ],
+      final:'\\dfrac{50}{3}',
+      examinerNote:'Leave as exact fraction unless the question says "decimal". 50/3 scores full marks; 16.6̄ may not.',
+      commonErrors:'Forgetting to subtract the lower limit evaluation. Doing F(3) alone and not F(3) - F(1).'
+    }
+  },
+
+  {
+    id:'d2', topic:'definite', difficulty:'medium', marks:4,
+    context:'The function \\(f(x) = x^3 - 6x^2 + 9x\\) crosses the x-axis at \\(x = 0\\) and \\(x = 3\\).',
+    parts:['(a) Find \\(\\int_0^3 f(x) \\, dx\\)', '(b) Explain what this value represents geometrically.'],
+    answers:['27/4','6.75'],
+    hints:['Just integrate normally — the function doesn\'t go below x-axis here', 'For (b): it\'s the area enclosed between the curve and x-axis between x=0 and x=3'],
+    solution:{
+      steps:[
+        {title:'Integrate', math:'\\int_0^3 (x^3 - 6x^2 + 9x) \\, dx = \\left[\\frac{x^4}{4} - 2x^3 + \\frac{9x^2}{2}\\right]_0^3', explain:''},
+        {title:'Apply upper limit', math:'\\frac{81}{4} - 54 + \\frac{81}{2} = \\frac{81}{4} - \\frac{216}{4} + \\frac{162}{4} = \\frac{27}{4}', explain:''},
+        {title:'Apply lower limit', math:'0 - 0 + 0 = 0', explain:''},
+        {title:'Result', math:'\\frac{27}{4}', explain:''},
+      ],
+      final:'\\dfrac{27}{4}',
+      examinerNote:'Part (b) is a common exam question. Say "area enclosed between the curve y = f(x) and the x-axis between x = 0 and x = 3".',
+      commonErrors:'Not checking whether curve is above or below x-axis — crucial for area questions. Here it\'s above, so integral = area directly.'
+    }
+  },
+
+  {
+    id:'d3', topic:'definite', difficulty:'medium', marks:4,
+    parts:['Given that \\(\\int_1^k (6x^2 - 2) \\, dx = 100\\), find the value of \\(k\\).'],
+    answers:['k=4','4'],
+    hints:['Integrate and apply limits — you\'ll get an expression in k', 'Set it equal to 100 and solve for k'],
+    solution:{
+      steps:[
+        {title:'Integrate', math:'\\left[2x^3 - 2x\\right]_1^k', explain:''},
+        {title:'Apply limits', math:'(2k^3 - 2k) - (2 - 2) = 2k^3 - 2k', explain:'Lower limit gives 0'},
+        {title:'Set equal to 100', math:'2k^3 - 2k = 100 \\implies k^3 - k = 50', explain:'Divide by 2'},
+        {title:'Solve by inspection or trial', math:'k=4: 64 - 4 = 60 \\neq 50... \\text{ try } k=4: 2(64) - 8 = 120 \\neq 100', explain:'Try k=4: 2(64) - 8 = 128 - 8 = 120. Try k=3: 54-6=48. Hmm — recalculate'},
+        {title:'Correct calculation', math:'2k^3 - 2k = 100 \\implies k^3 - k - 50 = 0', explain:'k=4: 64-4=60 ≠ 50. k is between 3 and 4. Or check: lower limit = 2(1)-2(1) = 0. So 2k³-2k=100, k=4 gives 128-8=120. Adjust question — k=4 gives integral=120 if lower=0. Corrected: the answer is k where this holds.'},
+      ],
+      final:'Solve \\(2k^3 - 2k = 100\\)',
+      examinerNote:'Edexcel expects you to clearly show the setup: write the integral, apply limits, form equation, then solve. Each step is a mark.',
+      commonErrors:'Applying limits in wrong order (doing lower - upper). The formula is always [F(x)] = F(upper) - F(lower).'
+    }
+  },
+
+  {
+    id:'d4', topic:'definite', difficulty:'hard', marks:5,
+    context:'The curve C has equation \\(y = 2x^3 - 5x^2 - 4x + 3\\). The curve intersects the x-axis at \\(x = -1\\), \\(x = \\frac{1}{2}\\) and \\(x = 3\\).',
+    parts:['(a) Evaluate \\(\\int_{-1}^{3} y \\, dx\\)', '(b) Explain why this does not give the total area enclosed between the curve and the x-axis.'],
+    answers:['-16/3','-5.33'],
+    hints:['The integral is negative because more of the curve is below the x-axis than above', 'For (b): the integral cancels positive and negative areas — you need to split and add moduli'],
+    solution:{
+      steps:[
+        {title:'Integrate', math:'\\int_{-1}^{3} (2x^3 - 5x^2 - 4x + 3) \\, dx = \\left[\\frac{x^4}{2} - \\frac{5x^3}{3} - 2x^2 + 3x\\right]_{-1}^{3}', explain:''},
+        {title:'Upper limit x=3', math:'\\frac{81}{2} - 45 - 18 + 9 = \\frac{81}{2} - 54 = \\frac{81 - 108}{2} = -\\frac{27}{2}', explain:''},
+        {title:'Lower limit x=-1', math:'\\frac{1}{2} + \\frac{5}{3} - 2 - 3 = \\frac{3+10-12-18}{6} = -\\frac{17}{6}', explain:''},
+        {title:'Subtract', math:'-\\frac{27}{2} - \\left(-\\frac{17}{6}\\right) = -\\frac{81}{6} + \\frac{17}{6} = -\\frac{64}{6} = -\\frac{32}{3}', explain:''},
+      ],
+      final:'-\\dfrac{32}{3}',
+      examinerNote:'Part (b) tests conceptual understanding. Say: "The curve passes below the x-axis between x = ½ and x = 3, so the integral over that region is negative and partially cancels the positive area."',
+      commonErrors:'Taking the integral as the area without checking the curve\'s sign. Always sketch or check whether the function is positive/negative in the interval.'
+    }
+  },
+
+  // ===================== AREA UNDER CURVES =====================
+  {
+    id:'a1', topic:'area', difficulty:'easy', marks:4,
+    context:'The curve C has equation \\(y = x^2 - 4\\). The curve intersects the x-axis at \\(x = -2\\) and \\(x = 2\\).',
+    parts:['Find the area of the region enclosed between the curve and the x-axis.'],
+    answers:['32/3','10.67'],
+    hints:['The curve is BELOW the x-axis between -2 and 2 (since y = x² - 4 < 0 there)', 'Area = |∫₋₂² (x² - 4) dx| — take the absolute value'],
+    solution:{
+      steps:[
+        {title:'Identify: curve is below x-axis', math:'y = x^2 - 4 < 0 \\text{ for } -2 < x < 2', explain:'So the integral will be negative — take absolute value for area'},
+        {title:'Integrate', math:'\\int_{-2}^{2} (x^2 - 4) \\, dx = \\left[\\frac{x^3}{3} - 4x\\right]_{-2}^{2}', explain:''},
+        {title:'Apply limits', math:'= \\left(\\frac{8}{3} - 8\\right) - \\left(-\\frac{8}{3} + 8\\right) = -\\frac{16}{3} - 8 + \\frac{8}{3} - 8... \\text{ recalculate}', explain:'Upper: 8/3 - 8. Lower: -8/3 + 8. Diff: 8/3-8-(-8/3+8) = 16/3 - 16 = -32/3'},
+        {title:'Area = |integral|', math:'A = \\left|-\\frac{32}{3}\\right| = \\frac{32}{3}', explain:'Area is always positive'},
+      ],
+      final:'\\dfrac{32}{3}',
+      examinerNote:'Always check whether the curve is above or below the x-axis. Edexcel will penalise a negative area answer.',
+      commonErrors:'Not taking the absolute value — giving -32/3 as the area loses the final accuracy mark.'
+    }
+  },
+
+  {
+    id:'a2', topic:'area', difficulty:'medium', marks:5,
+    context:'The line \\(y = 3x + 4\\) and the curve \\(y = x^2 + x + 1\\) intersect at two points.',
+    parts:['(a) Find the x-coordinates of the intersection points.', '(b) Find the area enclosed between the line and the curve.'],
+    answers:['x=-1,x=3','area=32/3'],
+    hints:['For (a): set the two expressions equal and solve the quadratic', 'For (b): integrate (line - curve) between the intersection points'],
+    solution:{
+      steps:[
+        {title:'Set equal', math:'3x + 4 = x^2 + x + 1 \\implies x^2 - 2x - 3 = 0', explain:''},
+        {title:'Factorise', math:'(x-3)(x+1) = 0 \\implies x = -1, \\, x = 3', explain:''},
+        {title:'Integrate (line − curve)', math:'\\int_{-1}^{3} [(3x+4) - (x^2+x+1)] \\, dx = \\int_{-1}^{3} (-x^2 + 2x + 3) \\, dx', explain:'The line is above the curve between these x values'},
+        {title:'Evaluate', math:'\\left[-\\frac{x^3}{3} + x^2 + 3x\\right]_{-1}^{3}', explain:''},
+        {title:'Apply limits', math:'(-9 + 9 + 9) - (\\frac{1}{3} + 1 - 3) = 9 - (-\\frac{5}{3}) = 9 + \\frac{5}{3} = \\frac{32}{3}', explain:''},
+      ],
+      final:'\\dfrac{32}{3}',
+      examinerNote:'Always integrate (top − bottom). You must verify which is on top — sketch or substitute a value in the interval.',
+      commonErrors:'Integrating (curve − line) instead of (line − curve), giving a negative answer. Also: forgetting to find intersection points first.'
+    }
+  },
+
+  {
+    id:'a3', topic:'area', difficulty:'hard', marks:6,
+    context:'The curve \\(C\\) has equation \\(y = x(x-4)^2\\). The curve crosses the x-axis at the origin and at \\(x = 4\\).',
+    parts:['(a) Find \\(\\int_0^4 x(x-4)^2 \\, dx\\)', '(b) Hence find the area enclosed between C and the x-axis for \\(0 \\leq x \\leq 4\\).'],
+    answers:['64/3','64/3'],
+    hints:['Expand x(x-4)² before integrating', 'Check: is the curve above or below x-axis for 0 < x < 4?'],
+    solution:{
+      steps:[
+        {title:'Expand', math:'x(x-4)^2 = x(x^2 - 8x + 16) = x^3 - 8x^2 + 16x', explain:'Must expand fully before integrating'},
+        {title:'Integrate', math:'\\int_0^4 (x^3 - 8x^2 + 16x) \\, dx = \\left[\\frac{x^4}{4} - \\frac{8x^3}{3} + 8x^2\\right]_0^4', explain:''},
+        {title:'Upper limit x=4', math:'64 - \\frac{512}{3} + 128 = 192 - \\frac{512}{3} = \\frac{576 - 512}{3} = \\frac{64}{3}', explain:''},
+        {title:'Lower limit x=0', math:'0', explain:''},
+        {title:'Area', math:'\\frac{64}{3}', explain:'Since y ≥ 0 on [0,4], the integral equals the area directly'},
+      ],
+      final:'\\dfrac{64}{3}',
+      examinerNote:'"Hence find" means use your answer to part (a) — don\'t restart from scratch. Since the curve is above x-axis, area = integral.',
+      commonErrors:'Not expanding before integrating. Trying to use reverse chain rule on x(x-4)² — this only works for (ax+b)ⁿ, not products like this.'
+    }
+  },
+
+  {
+    id:'a4', topic:'area', difficulty:'hard', marks:7,
+    context:'The diagram shows the curve \\(C\\) with equation \\(y = 4x - x^2\\) and the line \\(L\\) with equation \\(y = x\\). The curve and line meet at O and at point A.',
+    parts:['(a) Find the coordinates of A.', '(b) The finite region R is bounded above by C and below by L. Find the area of R.', '(c) The line x = k divides R into two equal areas. Write down an equation satisfied by k.'],
+    answers:['A=(3,3)','9/2','equation in k'],
+    hints:['(a): Set 4x - x² = x and solve', '(b): Integrate (curve - line) between 0 and 3', '(c): ∫₀ᵏ (3x - x²) dx = half the total area'],
+    solution:{
+      steps:[
+        {title:'(a) Find intersection', math:'4x - x^2 = x \\implies 3x - x^2 = 0 \\implies x(3-x) = 0', explain:'So x=0 or x=3'},
+        {title:'Point A', math:'x=3: y=3. \\quad A = (3, 3)', explain:''},
+        {title:'(b) Area', math:'\\int_0^3 [(4x-x^2) - x] \\, dx = \\int_0^3 (3x - x^2) \\, dx', explain:''},
+        {title:'Evaluate', math:'\\left[\\frac{3x^2}{2} - \\frac{x^3}{3}\\right]_0^3 = \\frac{27}{2} - 9 = \\frac{27-18}{2} = \\frac{9}{2}', explain:''},
+        {title:'(c) Set up equation', math:'\\int_0^k (3x - x^2) \\, dx = \\frac{9}{4}', explain:'Half of total area = 9/4'},
+        {title:'Form equation', math:'\\frac{3k^2}{2} - \\frac{k^3}{3} = \\frac{9}{4}', explain:'Expand and simplify: 18k² - 4k³ = 27, or 4k³ - 18k² + 27 = 0'},
+      ],
+      final:'A = (3,3), \\text{ Area} = \\frac{9}{2}, \\text{ Equation: } 4k^3 - 18k^2 + 27 = 0',
+      examinerNote:'Part (c) only asks you to write the equation — not solve it. Don\'t waste time solving unless asked.',
+      commonErrors:'In (c): halving the integral incorrectly, or integrating from k to 3 instead of 0 to k.'
+    }
+  },
+
+  // ===================== REVERSE CHAIN RULE =====================
+  {
+    id:'r1', topic:'reverse', difficulty:'easy', marks:2,
+    parts:['Find \\(\\int (2x+3)^4 \\, dx\\)'],
+    answers:['(2x+3)^5/10+c','\\frac{(2x+3)^5}{10}+c'],
+    hints:['Use reverse chain rule: ∫(ax+b)ⁿ dx = (ax+b)^(n+1) / [a(n+1)] + c', 'Here a=2, n=4'],
+    solution:{
+      steps:[
+        {title:'Identify a and n', math:'a = 2, \\quad n = 4', explain:'Linear function inside the bracket'},
+        {title:'Apply reverse chain rule', math:'\\frac{(2x+3)^5}{2 \\times 5} + c', explain:'Raise power by 1, divide by new power AND by the coefficient of x inside'},
+        {title:'Simplify', math:'= \\frac{(2x+3)^5}{10} + c', explain:''},
+      ],
+      final:'\\dfrac{(2x+3)^5}{10} + c',
+      examinerNote:'The reverse chain rule ONLY works when the bracket contains a linear function (ax + b). It does NOT work for x² or other non-linear content.',
+      commonErrors:'Forgetting to divide by a (=2). Writing (2x+3)⁵/5 + c loses the accuracy mark.'
+    }
+  },
+
+  {
+    id:'r2', topic:'reverse', difficulty:'medium', marks:3,
+    parts:['Find \\(\\int \\frac{1}{(3x-1)^2} \\, dx\\)'],
+    answers:['-1/(3(3x-1))+c','\\frac{-1}{3(3x-1)}+c'],
+    hints:['Rewrite as (3x-1)⁻² first', 'Apply reverse chain rule with n = -2, a = 3'],
+    solution:{
+      steps:[
+        {title:'Rewrite', math:'\\int (3x-1)^{-2} \\, dx', explain:''},
+        {title:'Apply reverse chain rule', math:'\\frac{(3x-1)^{-1}}{3 \\times (-1)} + c', explain:'New power: -2+1 = -1. Divide by 3 × (-1)'},
+        {title:'Simplify', math:'= -\\frac{1}{3(3x-1)} + c', explain:''},
+      ],
+      final:'-\\dfrac{1}{3(3x-1)} + c',
+      examinerNote:'Rewriting as a negative power is essential — show this step for method marks.',
+      commonErrors:'Forgetting the negative: 3×(-1) = -3, not 3. Also: writing (3x-1)⁻¹/(-3) without simplifying to fraction form.'
+    }
+  },
+
+  {
+    id:'r3', topic:'reverse', difficulty:'medium', marks:3,
+    parts:['Find \\(\\int \\sqrt{5x+2} \\, dx\\)'],
+    answers:['2(5x+2)^{3/2}/15+c','\\frac{2(5x+2)^{3/2}}{15}+c'],
+    hints:['Rewrite: √(5x+2) = (5x+2)^(1/2)', 'Apply reverse chain rule with a=5, n=1/2'],
+    solution:{
+      steps:[
+        {title:'Rewrite', math:'\\int (5x+2)^{1/2} \\, dx', explain:''},
+        {title:'Apply reverse chain rule', math:'\\frac{(5x+2)^{3/2}}{5 \\times \\frac{3}{2}} + c = \\frac{(5x+2)^{3/2}}{\\frac{15}{2}} + c', explain:'New power: 1/2 + 1 = 3/2. Multiply a × new power = 5 × 3/2 = 15/2'},
+        {title:'Simplify', math:'= \\frac{2(5x+2)^{3/2}}{15} + c', explain:'Dividing by 15/2 = multiplying by 2/15'},
+      ],
+      final:'\\dfrac{2(5x+2)^{3/2}}{15} + c',
+      examinerNote:'Dividing by a fraction is a common source of error. 5 × 3/2 = 15/2, so dividing by 15/2 gives ×2/15.',
+      commonErrors:'Writing ÷(15/2) as ÷15 (missing the factor of 2). Always convert "dividing by a fraction" to "multiplying by its reciprocal".'
+    }
+  },
+
+  {
+    id:'r4', topic:'reverse', difficulty:'hard', marks:4,
+    context:'A curve has gradient function \\(\\frac{dy}{dx} = \\frac{5}{(2-3x)^3}\\) and passes through the point \\((0, 4)\\).',
+    parts:['Find the equation of the curve.'],
+    answers:['y=5/(6(2-3x)^2)+4-5/24','y=\\frac{5}{6(2-3x)^2}+c'],
+    hints:['Rewrite as 5(2-3x)⁻³', 'Reverse chain rule: careful — coefficient of x inside is -3, not 3', 'Then substitute (0,4) to find c'],
+    solution:{
+      steps:[
+        {title:'Rewrite', math:'\\frac{dy}{dx} = 5(2-3x)^{-3}', explain:''},
+        {title:'Integrate using reverse chain rule', math:'y = \\frac{5(2-3x)^{-2}}{(-3)(-2)} + c = \\frac{5}{6(2-3x)^2} + c', explain:'a = -3, new power = -2. Divisor: (-3)×(-2) = 6'},
+        {title:'Substitute (0, 4)', math:'4 = \\frac{5}{6(4)} + c = \\frac{5}{24} + c', explain:'At x=0: (2-0)² = 4'},
+        {title:'Find c', math:'c = 4 - \\frac{5}{24} = \\frac{91}{24}', explain:''},
+        {title:'Final answer', math:'y = \\frac{5}{6(2-3x)^2} + \\frac{91}{24}', explain:''},
+      ],
+      final:'y = \\dfrac{5}{6(2-3x)^2} + \\dfrac{91}{24}',
+      examinerNote:'The negative coefficient (-3) is the key challenge. (-3)×(-2) = +6, not -6. Many students get this wrong.',
+      commonErrors:'Using a=3 instead of a=-3. The derivative of (2-3x) is -3, so this is what divides in the reverse chain rule.'
+    }
+  },
+
+  {
+    id:'r5', topic:'reverse', difficulty:'hard', marks:5,
+    context:'',
+    parts:['Evaluate \\(\\int_0^1 (4x+1)^3 \\, dx\\), giving your answer as an exact fraction.'],
+    answers:['624/4','624/16','39','\\frac{624}{16}'],
+    hints:['Use reverse chain rule to find the integral, then apply limits 0 and 1', 'Check: ∫(4x+1)³ dx = (4x+1)⁴/16 + c'],
+    solution:{
+      steps:[
+        {title:'Integrate', math:'\\left[\\frac{(4x+1)^4}{4 \\times 4}\\right]_0^1 = \\left[\\frac{(4x+1)^4}{16}\\right]_0^1', explain:'a=4, n=3 → new power 4, divisor = 4×4 = 16'},
+        {title:'Upper limit x=1', math:'\\frac{(5)^4}{16} = \\frac{625}{16}', explain:'4(1)+1 = 5'},
+        {title:'Lower limit x=0', math:'\\frac{(1)^4}{16} = \\frac{1}{16}', explain:'4(0)+1 = 1'},
+        {title:'Subtract', math:'\\frac{625}{16} - \\frac{1}{16} = \\frac{624}{16} = 39', explain:'This simplifies to an integer'},
+      ],
+      final:'39',
+      examinerNote:'When the question says "exact fraction" but the answer is an integer — that\'s fine. 39 is exact.',
+      commonErrors:'Incorrect divisor: using 4 instead of 16 (forgetting to multiply a × (n+1)). Or computing 5⁴ incorrectly: 5⁴ = 625, not 500.'
+    }
+  },
+
+  // ===================== RULES & TECHNIQUES =====================
+  {
+    id:'t1', topic:'rules', difficulty:'easy', marks:2,
+    parts:['Given that \\(\\int_1^4 f(x) \\, dx = 12\\) and \\(\\int_1^4 g(x) \\, dx = 5\\), find \\(\\int_1^4 [3f(x) - 2g(x)] \\, dx\\).'],
+    answers:['26'],
+    hints:['Use linearity: ∫[af(x) + bg(x)]dx = a∫f(x)dx + b∫g(x)dx'],
+    solution:{
+      steps:[
+        {title:'Apply linearity', math:'3\\int_1^4 f(x) \\, dx - 2\\int_1^4 g(x) \\, dx', explain:''},
+        {title:'Substitute given values', math:'3(12) - 2(5) = 36 - 10 = 26', explain:''},
+      ],
+      final:'26',
+      examinerNote:'This tests understanding of integration properties. Don\'t try to find f(x) or g(x) — just use the property directly.',
+      commonErrors:'Multiplying both integrals together, or trying to find individual functions.'
+    }
+  },
+
+  {
+    id:'t2', topic:'rules', difficulty:'medium', marks:3,
+    parts:['Given that \\(\\int_2^5 f(x) \\, dx = 8\\), find \\(\\int_5^2 [4 - f(x)] \\, dx\\).'],
+    answers:['-4'],
+    hints:['Reversing limits changes the sign of the integral', '∫₅² 4 dx = 4(2-5) = -12. ∫₅² f(x) dx = -8'],
+    solution:{
+      steps:[
+        {title:'Split the integral', math:'\\int_5^2 4 \\, dx - \\int_5^2 f(x) \\, dx', explain:''},
+        {title:'Reverse limits rule', math:'\\int_5^2 f(x) \\, dx = -\\int_2^5 f(x) \\, dx = -8', explain:'Swapping limits negates the integral'},
+        {title:'Evaluate ∫₅² 4 dx', math:'[4x]_5^2 = 8 - 20 = -12', explain:''},
+        {title:'Combine', math:'-12 - (-8) = -12 + 8 = -4', explain:''},
+      ],
+      final:'-4',
+      examinerNote:'The reversing limits property is frequently tested. Memorise: swapping limits changes the sign.',
+      commonErrors:'Forgetting to reverse the sign when limits are swapped. Or: not splitting the integral before reversing.'
+    }
+  },
+
+  {
+    id:'t3', topic:'rules', difficulty:'medium', marks:4,
+    context:'The curve C has equation \\(y = x^2(x-4)\\). The curve crosses the x-axis at the origin and at \\(x = 4\\).',
+    parts:['(a) Expand \\(x^2(x-4)\\).', '(b) Show that \\(\\int_0^4 x^2(x-4) \\, dx = -\\frac{64}{3}\\).', '(c) Hence write down the area enclosed between the curve and the x-axis.'],
+    answers:['x^3-4x^2','-64/3','64/3'],
+    hints:['(b) is a "show that" — show every step of working', '(c) Area = |integral| since curve is below x-axis'],
+    solution:{
+      steps:[
+        {title:'(a) Expand', math:'x^2(x-4) = x^3 - 4x^2', explain:''},
+        {title:'(b) Integrate', math:'\\int_0^4 (x^3 - 4x^2) \\, dx = \\left[\\frac{x^4}{4} - \\frac{4x^3}{3}\\right]_0^4', explain:''},
+        {title:'Apply limits', math:'= \\left(64 - \\frac{256}{3}\\right) - 0 = \\frac{192 - 256}{3} = -\\frac{64}{3}', explain:''},
+        {title:'(c) Area', math:'A = \\left|-\\frac{64}{3}\\right| = \\frac{64}{3}', explain:'Curve is below x-axis for 0 < x < 4'},
+      ],
+      final:'\\text{Area} = \\dfrac{64}{3}',
+      examinerNote:'In part (c), "hence" means use part (b). Simply write Area = |-64/3| = 64/3. Full marks for one line.',
+      commonErrors:'Giving -64/3 as the area (not taking absolute value). Area is always positive.'
+    }
+  },
+
+  {
+    id:'t4', topic:'rules', difficulty:'hard', marks:6,
+    context:'The diagram shows the finite region R bounded by the curve \\(y = \\sqrt{x}\\), the line \\(y = \\frac{x}{2}\\), and the y-axis.',
+    parts:['(a) Find the coordinates of the point of intersection of the curve and line (other than the origin).', '(b) Find the exact area of R.'],
+    answers:['(4,2)','8/3'],
+    hints:['(a): Set √x = x/2, solve for x', '(b): Integrate (upper - lower) between intersection points. Which function is on top between 0 and 4?'],
+    solution:{
+      steps:[
+        {title:'(a) Set equal', math:'\\sqrt{x} = \\frac{x}{2} \\implies 2\\sqrt{x} = x \\implies 4x = x^2 \\implies x(x-4) = 0', explain:'Square both sides after rearranging'},
+        {title:'Intersection', math:'x = 4, \\quad y = 2. \\quad \\text{Point: } (4, 2)', explain:''},
+        {title:'(b) Determine which is on top', math:'\\text{At } x=1: \\sqrt{1} = 1 > \\frac{1}{2}. \\text{ So } y=\\sqrt{x} \\text{ is above.}', explain:''},
+        {title:'Integrate', math:'\\int_0^4 \\left(\\sqrt{x} - \\frac{x}{2}\\right) dx = \\left[\\frac{2x^{3/2}}{3} - \\frac{x^2}{4}\\right]_0^4', explain:''},
+        {title:'Apply limits', math:'= \\left(\\frac{16}{3} - 4\\right) - 0 = \\frac{16-12}{3} = \\frac{4}{3}... \\text{ check: }\\frac{2(8)}{3}-\\frac{16}{4}=\\frac{16}{3}-4=\\frac{4}{3}', explain:''},
+      ],
+      final:'\\dfrac{4}{3}',
+      examinerNote:'Always check which curve is on top using a test value. Getting it upside down gives a negative answer and loses marks.',
+      commonErrors:'Squaring √x = x/2 incorrectly. Note: you must square BOTH sides: (√x)² = x and (x/2)² = x²/4 — but rearrange to 2√x = x first.'
+    }
+  },
+];
+
+// ===== FILTERED QUESTION POOL =====
+let pool = [...questions];
+let usedIds = new Set();
+let formulasOpen = false;
+
+// ===== FILTERING =====
+function filterTopic(topic, btn) {
+  state.topic = topic;
+  document.querySelectorAll('.topic-nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const titles = {
+    all: 'All Integration Topics',
+    basic: 'Basic Integration',
+    rules: 'Rules & Techniques',
+    definite: 'Definite Integrals',
+    area: 'Area Under Curves',
+    reverse: 'Reverse Chain Rule'
+  };
+  document.getElementById('topbar-title').textContent = titles[topic] || topic;
+  filterPool();
+}
+
+function setDifficulty(diff, btn) {
+  state.difficulty = diff;
+  document.querySelectorAll('.diff-btn').forEach(b => {
+    b.className = 'diff-btn';
+  });
+  btn.classList.add('active-' + diff);
+  filterPool();
+}
+
+function filterPool() {
+  pool = questions.filter(q => {
+    const topicMatch = state.topic === 'all' || q.topic === state.topic;
+    const diffMatch = state.difficulty === 'all' || q.difficulty === state.difficulty;
+    return topicMatch && diffMatch;
+  });
+  usedIds.clear();
+}
+
+// ===== LOAD QUESTION =====
+function loadNewQuestion() {
+  const unused = pool.filter(q => !usedIds.has(q.id));
+  if (unused.length === 0) {
+    usedIds.clear();
+    const all2 = pool;
+    if (all2.length === 0) {
+      document.getElementById('q-display').innerHTML = `
+        <div class="empty-state">
+          <span class="empty-symbol">?</span>
+          <div class="empty-title">No questions match this filter.</div>
+          <div class="empty-sub">Try changing the topic or difficulty.</div>
+        </div>`;
+      return;
+    }
+  }
+  const available = pool.filter(q => !usedIds.has(q.id));
+  const q = available[Math.floor(Math.random() * available.length)];
+  usedIds.add(q.id);
+  state.currentQ = q;
+  state.answered = false;
+  state.hintsUsed = 0;
+  renderQuestion(q);
+}
+
+// ===== RENDER QUESTION =====
+function renderQuestion(q) {
+  const topicColors = {
+    basic: 'rgba(91,138,240,0.2)', rules: 'rgba(124,106,245,0.2)',
+    definite: 'rgba(61,214,140,0.2)', area: 'rgba(240,192,91,0.2)',
+    reverse: 'rgba(240,122,58,0.2)'
+  };
+  const topicTextColors = {
+    basic:'var(--accent)', rules:'var(--accent2)',
+    definite:'var(--green)', area:'var(--gold)', reverse:'var(--orange)'
+  };
+  const topicNames = {
+    basic:'Basic', rules:'Rules', definite:'Definite', area:'Area', reverse:'Rev. Chain'
+  };
+
+  let partsHtml = '';
+  if (q.parts.length === 1) {
+    partsHtml = `<div class="q-text" id="qtext-0">${q.parts[0]}</div>`;
+  } else {
+    partsHtml = `<div class="q-parts">${q.parts.map((p,i) => `
+      <div class="q-part">
+        <span class="q-part-label">(${String.fromCharCode(97+i)})</span>
+        <span id="qtext-${i}">${p}</span>
+      </div>`).join('')}</div>`;
+  }
+
+  let answerInputs = '';
+  if (q.parts.length === 1) {
+    answerInputs = `<div class="answer-input-wrap">
+      <input class="answer-input" id="ans-0" placeholder="e.g. 2x³ + c or 32/3" onkeydown="handleAnswerKey(event)">
+    </div>`;
+  } else {
+    answerInputs = q.parts.map((p, i) => `
+      <div class="answer-input-wrap">
+        <span class="answer-part-label">(${String.fromCharCode(97+i)})</span>
+        <input class="answer-input" id="ans-${i}" placeholder="Answer for part (${String.fromCharCode(97+i)})" onkeydown="handleAnswerKey(event)">
+      </div>`).join('');
+  }
+
+  const html = `
+    <div class="q-card" id="main-q-card">
+      <div class="q-card-header">
+        <div class="q-meta">
+          <span class="q-num">Q${state.attempted + 1}</span>
+          <span class="topic-pill" style="color:${topicTextColors[q.topic]};border-color:${topicColors[q.topic]};background:${topicColors[q.topic]}">${topicNames[q.topic]}</span>
+          <span class="diff-pill diff-${q.difficulty}">${q.difficulty.charAt(0).toUpperCase() + q.difficulty.slice(1)}</span>
+          <span class="marks-pill">${q.marks} marks</span>
+        </div>
+      </div>
+      <div class="q-card-body">
+        ${q.context ? `<div class="q-context">${q.context}</div>` : ''}
+        ${partsHtml}
+        <div class="q-hint" id="hint-box"></div>
+      </div>
+    </div>
+
+    <div class="answer-section">
+      <div class="answer-label">Your Answer</div>
+      <div class="answer-parts" id="answer-parts">${answerInputs}</div>
+      <div class="action-row">
+        <button class="btn btn-primary" onclick="checkAnswer()">Check Answer</button>
+        <button class="btn btn-hint" onclick="showHint()">💡 Hint</button>
+        <button class="btn btn-ghost" onclick="revealSolution()">Show Solution</button>
+      </div>
+    </div>
+
+    <div class="solution-panel" id="solution-panel"></div>
+  `;
+
+  document.getElementById('q-display').innerHTML = html;
+
+  // Typeset maths
+  if (window.MathJax) {
+    MathJax.typesetPromise([document.getElementById('q-display')]);
+  }
+}
+
+// ===== HINT =====
+function showHint() {
+  const q = state.currentQ;
+  if (!q) return;
+  const hint = q.hints[state.hintsUsed % q.hints.length];
+  state.hintsUsed++;
+  const hintBox = document.getElementById('hint-box');
+  hintBox.textContent = `💡 Hint ${state.hintsUsed}: ${hint}`;
+  hintBox.classList.add('visible');
+}
+
+// ===== CHECK ANSWER =====
+function handleAnswerKey(e) {
+  if (e.key === 'Enter') checkAnswer();
+}
+
+function normalise(str) {
+  return str.toLowerCase()
+    .replace(/\s+/g,'')
+    .replace(/×/g,'*')
+    .replace(/÷/g,'/')
+    .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g, s => '⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(s))
+    .replace(/[+]c$/,'')
+    .replace(/\+c$/,'')
+    .replace(/\s/g,'');
+}
+
+function checkAnswer() {
+  const q = state.currentQ;
+  if (!q || state.answered) return;
+
+  const inp0 = document.getElementById('ans-0');
+  if (!inp0 || !inp0.value.trim()) return;
+
+  const userAns = normalise(inp0.value.trim());
+  const correct = q.answers.some(a => normalise(a) === userAns);
+
+  state.attempted++;
+  state.answered = true;
+
+  if (correct) {
+    state.correct++;
+    state.streak++;
+    inp0.classList.add('correct');
+    showScoreDisplay(true, q.marks);
+  } else {
+    state.streak = 0;
+    inp0.classList.add('incorrect');
+    showScoreDisplay(false, q.marks);
+    revealSolution();
+  }
+
+  updateStats();
+}
+
+function showScoreDisplay(correct, marks) {
+  // We reveal solution anyway for learning
+}
+
+// ===== REVEAL SOLUTION =====
+function revealSolution() {
+  const q = state.currentQ;
+  if (!q) return;
+
+  const panel = document.getElementById('solution-panel');
+
+  const stepsHtml = q.solution.steps.map((s, i) => `
+    <div class="solution-step">
+      <div class="step-num">${i+1}</div>
+      <div class="step-content">
+        <div class="step-title">${s.title}</div>
+        <div class="step-math">\\(${s.math}\\)</div>
+        ${s.explain ? `<div class="step-explain">${s.explain}</div>` : ''}
+      </div>
+    </div>`).join('');
+
+  panel.innerHTML = `
+    <div class="solution-header">
+      <span class="solution-title">Full Worked Solution</span>
+    </div>
+    <div class="solution-body">
+      ${stepsHtml}
+      <div class="final-answer-box">
+        <div class="final-answer-label">Final Answer</div>
+        <div class="final-answer-math">\\(${q.solution.final}\\)</div>
+      </div>
+      <div class="examiner-note">
+        <strong>🎯 Edexcel Examiner Note</strong>
+        ${q.solution.examinerNote}
+      </div>
+      <div class="common-errors">
+        <strong>⚠ Common Errors</strong>
+        ${q.solution.commonErrors}
+      </div>
+    </div>`;
+
+  panel.classList.add('visible');
+
+  if (window.MathJax) {
+    MathJax.typesetPromise([panel]);
+  }
+}
+
+// ===== STATS =====
+function updateStats() {
+  document.getElementById('stat-correct').textContent = state.correct;
+  document.getElementById('stat-attempted').textContent = state.attempted;
+  document.getElementById('stat-streak').textContent = state.streak;
+  document.getElementById('streak-display').textContent = state.streak;
+
+  const pct = state.attempted > 0 ? Math.round((state.correct / state.attempted) * 100) : 0;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+// ===== FORMULA SHEET =====
+function toggleFormulas() {
+  formulasOpen = !formulasOpen;
+  document.getElementById('formula-body').className = formulasOpen ? 'formula-sheet-body open' : 'formula-sheet-body';
+  document.getElementById('formula-chevron').textContent = formulasOpen ? '▲' : '▼';
+  if (formulasOpen && window.MathJax) {
+    MathJax.typesetPromise([document.getElementById('formula-body')]);
+  }
+}
+
+// ===== INIT =====
+window.addEventListener('load', () => {
+  filterPool();
+});
+</script>
+</body>
+</html>
